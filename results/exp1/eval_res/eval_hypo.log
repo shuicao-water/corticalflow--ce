@@ -1,0 +1,149 @@
+[2026-01-20 10:49:57,179][__main__][INFO] - Evaluation script
+Config:
+in_file: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+start_idx: 0
+end_idx: -1
+batch_size: 4
+num_sampled_points: 200000
+out_dir: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res
+
+[2026-01-20 10:49:57,180][__main__][INFO] - Reading input file from /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+[2026-01-20 10:49:57,184][__main__][INFO] - performing evaluation on 6 rows starting at (0, Fazekas0_0000801279_144137) and finishing at (6, Fazekas2_0002069427_115616)
+[2026-01-20 10:49:57,185][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000801279_144137/Fazekas0_0000801279_144137_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000801279_144137/surf/lh_low_signal_inner.white
+[2026-01-20 10:49:57,483][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000849974_115824/Fazekas0_0000849974_115824_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000849974_115824/surf/lh_low_signal_inner.white
+[2026-01-20 10:49:57,597][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+[2026-01-20 11:03:42,499][__main__][INFO] - Evaluation script
+Config:
+in_file: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+start_idx: 0
+end_idx: -1
+batch_size: 4
+num_sampled_points: 200000
+out_dir: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res
+
+[2026-01-20 11:03:42,499][__main__][INFO] - Reading input file from /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+[2026-01-20 11:03:42,510][__main__][INFO] - performing evaluation on 6 rows starting at (0, Fazekas0_0000801279_144137) and finishing at (6, Fazekas2_0002069427_115616)
+[2026-01-20 11:03:42,512][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000801279_144137/Fazekas0_0000801279_144137_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000801279_144137/surf/lh_low_signal_inner.white
+[2026-01-20 11:03:42,726][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000849974_115824/Fazekas0_0000849974_115824_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000849974_115824/surf/lh_low_signal_inner.white
+[2026-01-20 11:03:42,750][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+[2026-01-20 11:25:42,129][__main__][INFO] - Evaluation script
+Config:
+in_file: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+start_idx: 0
+end_idx: -1
+batch_size: 4
+num_sampled_points: 200000
+out_dir: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res
+
+[2026-01-20 11:25:42,129][__main__][INFO] - Reading input file from /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+[2026-01-20 11:25:42,133][__main__][INFO] - performing evaluation on 6 rows starting at (0, Fazekas0_0000801279_144137) and finishing at (6, Fazekas2_0002069427_115616)
+[2026-01-20 11:25:42,134][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000801279_144137/Fazekas0_0000801279_144137_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000801279_144137/surf/lh_low_signal_inner.white
+[2026-01-20 11:25:42,344][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000849974_115824/Fazekas0_0000849974_115824_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000849974_115824/surf/lh_low_signal_inner.white
+[2026-01-20 11:25:42,370][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+[2026-01-20 12:38:47,195][__main__][INFO] - Evaluation script
+Config:
+in_file: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+start_idx: 0
+end_idx: -1
+batch_size: 4
+num_sampled_points: 200000
+out_dir: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res
+
+[2026-01-20 12:38:47,196][__main__][INFO] - Reading input file from /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+[2026-01-20 12:38:47,210][__main__][INFO] - performing evaluation on 6 rows starting at (0, Fazekas0_0000801279_144137) and finishing at (6, Fazekas2_0002069427_115616)
+[2026-01-20 12:38:47,211][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000801279_144137/Fazekas0_0000801279_144137_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000801279_144137/surf/lh_low_signal_inner.white
+[2026-01-20 12:38:47,494][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000849974_115824/Fazekas0_0000849974_115824_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000849974_115824/surf/lh_low_signal_inner.white
+[2026-01-20 12:38:47,585][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+[2026-01-20 12:38:47,664][__main__][WARNING] - Skipping sample due to error loading meshes:
+  GT: /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+  Pred: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white
+  Error: cannot reshape array of size 786314 into shape (349580,3)
+[2026-01-20 12:38:47,665][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas1_0000002672_114840/Fazekas1_0000002672_114840_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas1_0000002672_114840/surf/lh_low_signal_inner.white
+[2026-01-20 12:38:47,821][__main__][INFO] - sampling point clouds
+[2026-01-20 12:38:47,922][__main__][INFO] - Computing metrics
+[2026-01-20 12:38:48,615][__main__][INFO] - Metrics:
+CHAMFER: [1.4940016 1.2630035 1.3801389]
+HAUSDORFF: [4.7113237 3.9450307 3.725578 ]
+HAUSDORFF_90: [1.5822637 1.4284464 1.4639417]
+NORMAL_CONSISTENCY: [0.9289533  0.93069524 0.93971854]
+SI: [nan nan nan]
+[2026-01-20 12:46:24,400][__main__][INFO] - Evaluation script
+Config:
+in_file: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+start_idx: 0
+end_idx: -1
+batch_size: 4
+num_sampled_points: 200000
+out_dir: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res
+
+[2026-01-20 12:46:24,400][__main__][INFO] - Reading input file from /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+[2026-01-20 12:46:24,404][__main__][INFO] - performing evaluation on 6 rows starting at (0, Fazekas0_0000801279_144137) and finishing at (6, Fazekas2_0002069427_115616)
+[2026-01-20 12:46:24,404][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000801279_144137/Fazekas0_0000801279_144137_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000801279_144137/surf/lh_low_signal_inner.white
+[2026-01-20 12:46:24,605][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000849974_115824/Fazekas0_0000849974_115824_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000849974_115824/surf/lh_low_signal_inner.white
+[2026-01-20 12:46:24,633][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+[2026-01-20 12:46:24,646][__main__][WARNING] - Skipping sample due to error loading meshes:
+  GT: /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+  Pred: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white
+  Error: cannot reshape array of size 786314 into shape (349580,3)
+[2026-01-20 12:46:24,646][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas1_0000002672_114840/Fazekas1_0000002672_114840_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas1_0000002672_114840/surf/lh_low_signal_inner.white
+[2026-01-20 12:46:24,708][__main__][INFO] - sampling point clouds
+[2026-01-20 12:46:24,799][__main__][INFO] - Computing metrics
+[2026-01-20 12:46:25,490][__main__][INFO] - Metrics:
+CHAMFER: [1.493248  1.2612157 1.3799615]
+HAUSDORFF: [4.729689  4.0075636 3.7143495]
+HAUSDORFF_90: [1.5828716 1.4304259 1.4600576]
+NORMAL_CONSISTENCY: [0.92901564 0.9309257  0.9397108 ]
+SI: [nan nan nan]
+[2026-01-20 12:46:25,492][__main__][INFO] - 4/6 rows has been processed
+[2026-01-20 12:46:25,492][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas1_0000055926_140302/Fazekas1_0000055926_140302_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas1_0000055926_140302/surf/lh_low_signal_inner.white
+[2026-01-20 12:46:25,543][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas2_0002069427_115616/Fazekas2_0002069427_115616_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas2_0002069427_115616/surf/lh_low_signal_inner.white
+[2026-01-20 12:46:25,642][__main__][INFO] - sampling point clouds
+[2026-01-20 12:46:25,646][__main__][INFO] - Computing metrics
+[2026-01-20 12:46:26,058][__main__][INFO] - Metrics:
+CHAMFER: [1.6086504 1.1198003]
+HAUSDORFF: [4.0893135 3.5877562]
+HAUSDORFF_90: [1.6278583 1.285416 ]
+NORMAL_CONSISTENCY: [0.9345802 0.9455214]
+SI: [nan nan]
+[2026-01-20 12:46:26,061][__main__][INFO] - 8/6 rows has been processed
+[2026-01-20 12:46:26,068][__main__][INFO] - Metrics computation done with success and results saved to /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_00000_00006_part.csv.
+[2026-01-20 13:05:53,514][__main__][INFO] - Evaluation script
+Config:
+in_file: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+start_idx: 0
+end_idx: -1
+batch_size: 4
+num_sampled_points: 200000
+out_dir: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res
+
+[2026-01-20 13:05:53,514][__main__][INFO] - Reading input file from /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv
+[2026-01-20 13:05:53,518][__main__][INFO] - performing evaluation on 6 rows starting at (0, Fazekas0_0000801279_144137) and finishing at (6, Fazekas2_0002069427_115616)
+[2026-01-20 13:05:53,518][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000801279_144137/Fazekas0_0000801279_144137_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000801279_144137/surf/lh_low_signal_inner.white
+[2026-01-20 13:05:53,725][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000849974_115824/Fazekas0_0000849974_115824_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000849974_115824/surf/lh_low_signal_inner.white
+[2026-01-20 13:05:53,752][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+[2026-01-20 13:05:53,764][__main__][WARNING] - Skipping sample due to error loading meshes:
+  GT: /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas0_0000870062_152505/surf/lh_low_signal_inner.white
+  Pred: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas0_0000870062_152505/Fazekas0_0000870062_152505_lh_inner_Df2.white
+  Error: cannot reshape array of size 786314 into shape (349580,3)
+[2026-01-20 13:05:53,764][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas1_0000002672_114840/Fazekas1_0000002672_114840_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas1_0000002672_114840/surf/lh_low_signal_inner.white
+[2026-01-20 13:05:53,848][__main__][INFO] - sampling point clouds
+[2026-01-20 13:05:53,941][__main__][INFO] - Computing metrics
+[2026-01-20 13:05:54,636][__main__][INFO] - Metrics:
+CHAMFER: [1.4900391 1.2568202 1.3800468]
+HAUSDORFF: [4.733672  3.9804914 3.792834 ]
+HAUSDORFF_90: [1.5785149 1.4226633 1.4620366]
+NORMAL_CONSISTENCY: [0.9285859  0.9307605  0.93979394]
+SI: [nan nan nan]
+[2026-01-20 13:05:55,236][__main__][INFO] - 4/6 rows has been processed
+[2026-01-20 13:05:55,237][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas1_0000055926_140302/Fazekas1_0000055926_140302_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas1_0000055926_140302/surf/lh_low_signal_inner.white
+[2026-01-20 13:05:55,262][__main__][INFO] - Loading predicted and ground-truth meshes: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/pred_surf_res/Fazekas2_0002069427_115616/Fazekas2_0002069427_115616_lh_inner_Df2.white x /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces/Fazekas2_0002069427_115616/surf/lh_low_signal_inner.white
+[2026-01-20 13:05:55,281][__main__][INFO] - sampling point clouds
+[2026-01-20 13:05:55,285][__main__][INFO] - Computing metrics
+[2026-01-20 13:05:55,699][__main__][INFO] - Metrics:
+CHAMFER: [1.604582  1.1193941]
+HAUSDORFF: [4.0813813 3.4183147]
+HAUSDORFF_90: [1.6233008 1.284755 ]
+NORMAL_CONSISTENCY: [0.934762  0.9457914]
+SI: [nan nan]
+[2026-01-20 13:05:56,112][__main__][INFO] - 8/6 rows has been processed
+[2026-01-20 13:05:56,119][__main__][INFO] - Metrics computation done with success and results saved to /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_00000_00006_part.csv.

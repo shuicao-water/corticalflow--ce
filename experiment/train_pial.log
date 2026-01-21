@@ -1,0 +1,100 @@
+[2026-01-15 10:08:10,714][__main__][INFO] - Training Cortical Flow (PIAL MODEL)
+Config:
+user_config: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/corticalflow/resources/config_samples/CFPP_train_lh_pial.yaml
+dataset:
+  path: <path_to_preprop_dataset>
+  split_file: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/corticalflow/resources/ADNI_SPLIT.csv
+  train_split_name: train
+  val_split_name: val
+  surface_name: lh_pial
+trainer:
+  img_batch_size: 3
+  points_per_image: 150000
+  train_log_interval: 10
+  checkpoint_interval: 10000
+  evaluate_interval: 5000
+  device: cuda:0
+  resume: null
+  debug: false
+pial_model:
+  number_of_iterations:
+  - 70000
+  - 70000
+  - 70000
+  nb_features:
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  integration_method: RK4
+  integration_steps: 30
+  share_flows: true
+white_model:
+  model_checkpoint: <CFPP_ROOT_DIR>/resources/trained_models/CFPP_LEFT_WHITE.pth
+  nb_features:
+  - - - 16
+      - 32
+      - 32
+      - 32
+    - - 32
+      - 32
+      - 32
+      - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  template: <CFPP_ROOT_DIR>/resources/smooth_templates/lh_white_smooth_380k.obj
+  integration_method: RK4
+  integration_steps: 30
+  share_flows: true
+objective:
+  chamffer_weight:
+  - 1.0
+  - 1.0
+  - 1.0
+  edge_loss_weight:
+  - 1.0
+  - 1.0
+  - 1.0
+optimizer:
+  name: Adam
+  lr:
+  - 0.0001
+  - 0.0001
+  - 0.0001
+outputs:
+  output_dir: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/experiment
+model:
+  templates:
+  - /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/corticalflow/resources/smooth_templates/lh_white_smooth_40k.obj
+  - <CFPP_ROOT_DIR>/resources/smooth_templates/lh_white_smooth_140k.obj
+  - <CFPP_ROOT_DIR>/resources/smooth_templates/lh_white_smooth_380k.obj
+
+[2026-01-15 10:08:10,786][__main__][INFO] - 2353 subjects loaded for training
+[2026-01-15 10:08:10,792][__main__][INFO] - 375 subjects loaded for validation

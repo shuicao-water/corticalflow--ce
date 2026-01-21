@@ -1,0 +1,666 @@
+/home_data/home/xiaoqin2025/.conda/envs/Surf/bin/python
+/public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/corticalflow/resources/config_samples/config_5T/CFPP_train_lh_5T_outer.yaml
+[2026-01-20 22:30:56,105][__main__][INFO] - Training Cortical Flow (PIAL MODEL)
+Config:
+user_config: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/corticalflow/resources/config_samples/config_5T/CFPP_train_lh_5T_outer.yaml
+dataset:
+  path: <path_to_preprop_dataset>
+  split_file: <CFPP_ROOT_DIR>/resources/ADNI_SPLIT.csv
+  train_split_name: train
+  val_split_name: valid
+  surface_name: lh_outer
+  hemisphere: lh
+  surf_type: outer
+  dataset_path: /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces
+  datasplit_csv: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CotexODE/code/CortexODE-ce/data/subject_split_original.csv
+trainer:
+  img_batch_size: 3
+  points_per_image: 150000
+  train_log_interval: 10
+  checkpoint_interval: 10000
+  evaluate_interval: 5000
+  device: cuda:0
+  resume: null
+  debug: false
+pial_model:
+  number_of_iterations:
+  - 70000
+  - 70000
+  - 70000
+  nb_features:
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  integration_method: RK4
+  integration_steps: 30
+  share_flows: true
+white_model:
+  model_checkpoint: <CFPP_ROOT_DIR>/resources/trained_models/CFPP_LEFT_WHITE.pth
+  nb_features:
+  - - - 16
+      - 32
+      - 32
+      - 32
+    - - 32
+      - 32
+      - 32
+      - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  template: <CFPP_ROOT_DIR>/resources/smooth_templates/lh_white_smooth_380k.obj
+  integration_method: RK4
+  integration_steps: 30
+  share_flows: true
+objective:
+  chamffer_weight:
+  - 1.0
+  - 1.0
+  - 1.0
+  edge_loss_weight:
+  - 1.0
+  - 1.0
+  - 1.0
+optimizer:
+  name: Adam
+  lr:
+  - 0.0001
+  - 0.0001
+  - 0.0001
+outputs:
+  output_dir: /public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/exp/exp_lh_outer
+
+[2026-01-20 22:30:56,766][__main__][INFO] - 188 subjects loaded for training
+[2026-01-20 22:30:56,903][__main__][INFO] - 41 subjects loaded for validation
+[2026-01-20 22:30:57,102][__main__][INFO] - Learnable Pial Model setup:
+CorticalFlow(
+  (deform_blocks): ModuleList(
+    (0): DeformationBlock(
+      (encoder): Unet(
+        (downarm): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(1, 16, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 32, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+        (uparm): ModuleList(
+          (0): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+          (1): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(48, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+        )
+        (extras): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(33, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+      )
+      (flow): Conv3d(16, 3, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+      (deformer): DiffeoMeshDeformer(
+        (integrate): IntegratePointWiseRK4(
+          (interpolator): PointPooling()
+        )
+      )
+    )
+    (1): DeformationBlock(
+      (encoder): Unet(
+        (downarm): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(4, 16, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 32, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+        (uparm): ModuleList(
+          (0): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+          (1): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(48, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+        )
+        (extras): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(36, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+      )
+      (flow): Conv3d(16, 3, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+      (deformer): DiffeoMeshDeformer(
+        (integrate): IntegratePointWiseRK4(
+          (interpolator): PointPooling()
+        )
+      )
+    )
+    (2): DeformationBlock(
+      (encoder): Unet(
+        (downarm): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(7, 16, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 32, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+        (uparm): ModuleList(
+          (0): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+          (1): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(48, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+        )
+        (extras): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(39, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+      )
+      (flow): Conv3d(16, 3, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+      (deformer): DiffeoMeshDeformer(
+        (integrate): IntegratePointWiseRK4(
+          (interpolator): PointPooling()
+        )
+      )
+    )
+  )
+)
+[2026-01-20 22:30:57,113][__main__][INFO] - Tensorboard logs saved to /public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/exp/exp_lh_outer/tb_logs
+[2026-01-20 22:30:57,113][__main__][INFO] - Training deformation 0
+[2026-01-20 22:30:57,113][__main__][INFO] - Train deform 0: number of learnable parameters: 105987/325737
+[2026-01-20 22:30:57,114][__main__][INFO] - Train deform 0: Optimizer setup:
+Adam (
+Parameter Group 0
+    amsgrad: False
+    betas: (0.9, 0.999)
+    capturable: False
+    differentiable: False
+    eps: 1e-08
+    foreach: None
+    fused: None
+    lr: 0.0001
+    maximize: False
+    weight_decay: 0
+)
+[2026-01-20 22:30:57,114][__main__][INFO] - Starting train deformation 0 from 1 iterations with best validation loss of 3.4028234663852886e+38
+[2026-01-20 22:32:39,848][__main__][INFO] - Training: deform=0, Ite=10, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0006018215208314359, 'edge_loss': 0.0001182450017950032, 'loss': 0.0007200665189884603}), AvgIteTime=10.27 secs
+[2026-01-20 22:34:17,411][__main__][INFO] - Training: deform=0, Ite=20, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005843866616487503, 'edge_loss': 0.00011745811279979534, 'loss': 0.000701844779541716}), AvgIteTime=9.76 secs
+[2026-01-20 22:35:55,317][__main__][INFO] - Training: deform=0, Ite=30, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0006028961157426238, 'edge_loss': 0.00011595042305998505, 'loss': 0.0007188465271610767}), AvgIteTime=9.79 secs
+[2026-01-20 22:37:32,776][__main__][INFO] - Training: deform=0, Ite=40, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000617777172010392, 'edge_loss': 0.00012498046780820004, 'loss': 0.0007427576463669538}), AvgIteTime=9.74 secs
+[2026-01-20 22:39:11,535][__main__][INFO] - Training: deform=0, Ite=50, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0006097124889492989, 'edge_loss': 0.00012113919583498501, 'loss': 0.0007308516884222627}), AvgIteTime=9.88 secs
+[2026-01-20 22:40:49,710][__main__][INFO] - Training: deform=0, Ite=60, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005406138312537223, 'edge_loss': 0.00011853228570544161, 'loss': 0.000659146107500419}), AvgIteTime=9.82 secs
+[2026-01-20 22:42:27,542][__main__][INFO] - Training: deform=0, Ite=70, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005815218202769757, 'edge_loss': 0.00012029659264953808, 'loss': 0.0007018184114713222}), AvgIteTime=9.78 secs
+[2026-01-20 22:44:04,555][__main__][INFO] - Training: deform=0, Ite=80, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005684251693310217, 'edge_loss': 0.00012209024498588406, 'loss': 0.0006905154092237354}), AvgIteTime=9.70 secs
+[2026-01-20 22:45:41,096][__main__][INFO] - Training: deform=0, Ite=90, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005642279284074903, 'edge_loss': 0.00012022279770462774, 'loss': 0.0006844507239293307}), AvgIteTime=9.65 secs
+[2026-01-20 22:47:17,663][__main__][INFO] - Training: deform=0, Ite=100, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000554625503718853, 'edge_loss': 0.00011718544410541654, 'loss': 0.0006718109507346526}), AvgIteTime=9.66 secs
+[2026-01-20 22:48:54,256][__main__][INFO] - Training: deform=0, Ite=110, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005430344870546832, 'edge_loss': 0.00011955786831094884, 'loss': 0.0006625923560932279}), AvgIteTime=9.66 secs
+[2026-01-20 22:50:30,940][__main__][INFO] - Training: deform=0, Ite=120, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005067476304247975, 'edge_loss': 0.00011291860209894367, 'loss': 0.0006196662317961455}), AvgIteTime=9.67 secs
+[2026-01-20 22:51:58,373][__main__][INFO] - Training: deform=0, Ite=130, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005055456917034462, 'edge_loss': 0.00011312955321045593, 'loss': 0.0006186752405483275}), AvgIteTime=8.74 secs
+[2026-01-20 22:53:35,952][__main__][INFO] - Training: deform=0, Ite=140, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005348028847947716, 'edge_loss': 0.00011944796206080355, 'loss': 0.0006542508373968304}), AvgIteTime=9.76 secs
+[2026-01-20 22:55:13,065][__main__][INFO] - Training: deform=0, Ite=150, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000524886031053029, 'edge_loss': 0.00011895139978150837, 'loss': 0.000643837422830984}), AvgIteTime=9.71 secs
+[2026-01-20 22:56:51,405][__main__][INFO] - Training: deform=0, Ite=160, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005138845648616552, 'edge_loss': 0.0001163389031717088, 'loss': 0.0006302234658505767}), AvgIteTime=9.83 secs
+[2026-01-20 22:58:29,057][__main__][INFO] - Training: deform=0, Ite=170, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005318878742400557, 'edge_loss': 0.00012007959012407809, 'loss': 0.0006519674672745169}), AvgIteTime=9.76 secs
+[2026-01-20 23:00:06,424][__main__][INFO] - Training: deform=0, Ite=180, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005298069154378027, 'edge_loss': 0.00012099641025997698, 'loss': 0.0006508033256977797}), AvgIteTime=9.73 secs
+[2026-01-20 23:01:47,463][__main__][INFO] - Training: deform=0, Ite=190, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005206702247960493, 'edge_loss': 0.00011529714174685068, 'loss': 0.0006359673570841551}), AvgIteTime=10.10 secs
+[2026-01-20 23:03:26,176][__main__][INFO] - Training: deform=0, Ite=200, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005542042432352901, 'edge_loss': 0.0001240397170477081, 'loss': 0.0006782439595554024}), AvgIteTime=9.87 secs
+[2026-01-20 23:05:11,645][__main__][INFO] - Training: deform=0, Ite=210, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000524891575332731, 'edge_loss': 0.00012133843265473842, 'loss': 0.0006462300138082355}), AvgIteTime=10.55 secs
+[2026-01-20 23:06:58,360][__main__][INFO] - Training: deform=0, Ite=220, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005049231578595937, 'edge_loss': 0.00011403340758988633, 'loss': 0.0006189565698150546}), AvgIteTime=10.67 secs
+[2026-01-20 23:08:44,509][__main__][INFO] - Training: deform=0, Ite=230, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005143696384038776, 'edge_loss': 0.00011657938011921942, 'loss': 0.0006309490243438631}), AvgIteTime=10.61 secs
+[2026-01-20 23:10:27,895][__main__][INFO] - Training: deform=0, Ite=240, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005007884232327342, 'edge_loss': 0.0001114564249292016, 'loss': 0.0006122448394307867}), AvgIteTime=10.34 secs
+[2026-01-20 23:12:06,073][__main__][INFO] - Training: deform=0, Ite=250, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004939624021062627, 'edge_loss': 0.00011584871463128365, 'loss': 0.0006098111101891845}), AvgIteTime=9.82 secs
+[2026-01-20 23:13:36,005][__main__][INFO] - Training: deform=0, Ite=260, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005191234726225957, 'edge_loss': 0.00011872358300024644, 'loss': 0.0006378470512572676}), AvgIteTime=8.99 secs
+[2026-01-20 23:15:15,603][__main__][INFO] - Training: deform=0, Ite=270, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005050496227340772, 'edge_loss': 0.00011560827697394415, 'loss': 0.0006206578924320638}), AvgIteTime=9.96 secs
+[2026-01-20 23:16:56,502][__main__][INFO] - Training: deform=0, Ite=280, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005144099326571449, 'edge_loss': 0.00012121791078243405, 'loss': 0.000635627843439579}), AvgIteTime=10.09 secs
+[2026-01-20 23:18:36,604][__main__][INFO] - Training: deform=0, Ite=290, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005175533675355837, 'edge_loss': 0.00011768817930715158, 'loss': 0.0006352415424771607}), AvgIteTime=10.01 secs
+[2026-01-20 23:20:18,562][__main__][INFO] - Training: deform=0, Ite=300, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005531888571567833, 'edge_loss': 0.00011684068449540064, 'loss': 0.0006700295431073755}), AvgIteTime=10.20 secs
+[2026-01-20 23:21:58,572][__main__][INFO] - Training: deform=0, Ite=310, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004974647861672565, 'edge_loss': 0.00011361423166817985, 'loss': 0.0006110790069215}), AvgIteTime=10.00 secs
+[2026-01-20 23:23:44,366][__main__][INFO] - Training: deform=0, Ite=320, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005011809087591245, 'edge_loss': 0.00011766931420424953, 'loss': 0.0006188502185977996}), AvgIteTime=10.58 secs
+[2026-01-20 23:25:25,450][__main__][INFO] - Training: deform=0, Ite=330, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000511020832345821, 'edge_loss': 0.00011739790352294222, 'loss': 0.0006284187431447208}), AvgIteTime=10.11 secs
+[2026-01-20 23:27:06,395][__main__][INFO] - Training: deform=0, Ite=340, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005310572363669053, 'edge_loss': 0.00012202214711578562, 'loss': 0.0006530793732963502}), AvgIteTime=10.09 secs
+[2026-01-20 23:28:47,637][__main__][INFO] - Training: deform=0, Ite=350, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005186559195863083, 'edge_loss': 0.00012178384640719742, 'loss': 0.0006404397659935057}), AvgIteTime=10.12 secs
+[2026-01-20 23:30:27,703][__main__][INFO] - Training: deform=0, Ite=360, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005408247583545744, 'edge_loss': 0.00012123267733841204, 'loss': 0.0006620574276894331}), AvgIteTime=10.00 secs
+[2026-01-20 23:32:09,314][__main__][INFO] - Training: deform=0, Ite=370, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000520142717869021, 'edge_loss': 0.0001199443511723075, 'loss': 0.0006400870683137327}), AvgIteTime=10.16 secs
+[2026-01-20 23:33:39,568][__main__][INFO] - Training: deform=0, Ite=380, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005227123852819205, 'edge_loss': 0.00011674793349811808, 'loss': 0.000639460317324847}), AvgIteTime=9.02 secs
+[2026-01-20 23:35:20,584][__main__][INFO] - Training: deform=0, Ite=390, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005260946054477245, 'edge_loss': 0.00011893906048499048, 'loss': 0.0006450336601119489}), AvgIteTime=10.10 secs
+[2026-01-20 23:37:00,376][__main__][INFO] - Training: deform=0, Ite=400, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005143906368175521, 'edge_loss': 0.00012005499811493792, 'loss': 0.0006344456342048943}), AvgIteTime=9.98 secs
+[2026-01-20 23:38:40,482][__main__][INFO] - Training: deform=0, Ite=410, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005252117174677551, 'edge_loss': 0.00012442219303920865, 'loss': 0.0006496339046861976}), AvgIteTime=10.01 secs
+[2026-01-20 23:40:22,100][__main__][INFO] - Training: deform=0, Ite=420, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005201634048717096, 'edge_loss': 0.00011895485295099206, 'loss': 0.000639118260005489}), AvgIteTime=10.16 secs
+[2026-01-20 23:42:03,547][__main__][INFO] - Training: deform=0, Ite=430, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004909351206151769, 'edge_loss': 0.00011536405145307072, 'loss': 0.0006062991684302688}), AvgIteTime=10.14 secs
+[2026-01-20 23:43:43,367][__main__][INFO] - Training: deform=0, Ite=440, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005353194923372939, 'edge_loss': 0.00011969154511461965, 'loss': 0.0006550110410898924}), AvgIteTime=9.98 secs
+[2026-01-20 23:45:32,141][__main__][INFO] - Training: deform=0, Ite=450, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000496111751999706, 'edge_loss': 0.00011226597925997339, 'loss': 0.0006083777348976583}), AvgIteTime=10.88 secs
+[2026-01-20 23:47:12,578][__main__][INFO] - Training: deform=0, Ite=460, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004901364591205493, 'edge_loss': 0.00011735958687495441, 'loss': 0.0006074960401747376}), AvgIteTime=10.04 secs
+[2026-01-20 23:48:54,309][__main__][INFO] - Training: deform=0, Ite=470, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005211037583649159, 'edge_loss': 0.00012100017629563808, 'loss': 0.0006421039346605539}), AvgIteTime=10.17 secs
+[2026-01-20 23:50:34,984][__main__][INFO] - Training: deform=0, Ite=480, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005116661050124094, 'edge_loss': 0.00011641267847153358, 'loss': 0.0006280787813011557}), AvgIteTime=10.07 secs
+[2026-01-20 23:52:16,041][__main__][INFO] - Training: deform=0, Ite=490, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005369081307435408, 'edge_loss': 0.00012259028299013152, 'loss': 0.0006594984151888639}), AvgIteTime=10.11 secs
+[2026-01-20 23:53:58,527][__main__][INFO] - Training: deform=0, Ite=500, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005222640669671818, 'edge_loss': 0.0001207508052175399, 'loss': 0.0006430148670915515}), AvgIteTime=10.25 secs
+[2026-01-20 23:55:28,227][__main__][INFO] - Training: deform=0, Ite=510, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005264783307211473, 'edge_loss': 0.00011965046942350455, 'loss': 0.000646128790685907}), AvgIteTime=8.97 secs
+[2026-01-20 23:57:09,391][__main__][INFO] - Training: deform=0, Ite=520, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005087374476715923, 'edge_loss': 0.00012031667720293626, 'loss': 0.0006290541321504861}), AvgIteTime=10.12 secs
+[2026-01-20 23:58:50,428][__main__][INFO] - Training: deform=0, Ite=530, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004802023817319423, 'edge_loss': 0.00011590434514801018, 'loss': 0.0005961067305179313}), AvgIteTime=10.10 secs
+[2026-01-21 00:00:30,173][__main__][INFO] - Training: deform=0, Ite=540, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005230247101280838, 'edge_loss': 0.00012112863187212497, 'loss': 0.0006441533449105918}), AvgIteTime=9.97 secs
+[2026-01-21 00:02:11,687][__main__][INFO] - Training: deform=0, Ite=550, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000523877126397565, 'edge_loss': 0.00011623758036876098, 'loss': 0.0006401147053111345}), AvgIteTime=10.15 secs
+[2026-01-21 00:03:51,175][__main__][INFO] - Training: deform=0, Ite=560, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005228924797847867, 'edge_loss': 0.00011865511914948002, 'loss': 0.0006415475974790752}), AvgIteTime=9.95 secs
+[2026-01-21 00:05:39,496][__main__][INFO] - Training: deform=0, Ite=570, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004859986976953223, 'edge_loss': 0.00010894788574660197, 'loss': 0.0005949465848971158}), AvgIteTime=10.83 secs
+[2026-01-21 00:07:18,143][__main__][INFO] - Training: deform=0, Ite=580, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005163123365491629, 'edge_loss': 0.00011965459561906755, 'loss': 0.0006359669263474643}), AvgIteTime=9.86 secs
+[2026-01-21 00:08:59,363][__main__][INFO] - Training: deform=0, Ite=590, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004897539358353243, 'edge_loss': 0.00011326465246384033, 'loss': 0.0006030185904819518}), AvgIteTime=10.12 secs
+[2026-01-21 00:10:41,077][__main__][INFO] - Training: deform=0, Ite=600, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005290737986797467, 'edge_loss': 0.00011767164323828183, 'loss': 0.0006467454368248582}), AvgIteTime=10.17 secs
+[2026-01-21 00:12:22,177][__main__][INFO] - Training: deform=0, Ite=610, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004937410820275545, 'edge_loss': 0.00011706575023708865, 'loss': 0.0006108068337198347}), AvgIteTime=10.11 secs
+[2026-01-21 00:14:03,712][__main__][INFO] - Training: deform=0, Ite=620, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004699987010098994, 'edge_loss': 0.00011482114568934776, 'loss': 0.0005848198517924175}), AvgIteTime=10.15 secs
+[2026-01-21 00:15:30,210][__main__][INFO] - Training: deform=0, Ite=630, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005420742963906378, 'edge_loss': 0.00012479252618504688, 'loss': 0.00066686681821011}), AvgIteTime=8.65 secs
+[2026-01-21 00:17:14,250][__main__][INFO] - Training: deform=0, Ite=640, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004946185450535268, 'edge_loss': 0.00011463410555734299, 'loss': 0.0006092526484280825}), AvgIteTime=10.40 secs
+[2026-01-21 00:18:55,526][__main__][INFO] - Training: deform=0, Ite=650, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005065886827651412, 'edge_loss': 0.00011812978773377836, 'loss': 0.0006247184704989195}), AvgIteTime=10.13 secs
+[2026-01-21 00:20:37,793][__main__][INFO] - Training: deform=0, Ite=660, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005099381785839796, 'edge_loss': 0.0001184716667921748, 'loss': 0.0006284098431933671}), AvgIteTime=10.22 secs
+[2026-01-21 00:22:19,244][__main__][INFO] - Training: deform=0, Ite=670, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005141105852089822, 'edge_loss': 0.0001194201540783979, 'loss': 0.0006335307378321886}), AvgIteTime=10.14 secs
+[2026-01-21 00:24:00,934][__main__][INFO] - Training: deform=0, Ite=680, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005017295363359154, 'edge_loss': 0.00011768675976782106, 'loss': 0.0006194162939209491}), AvgIteTime=10.17 secs
+[2026-01-21 00:25:41,161][__main__][INFO] - Training: deform=0, Ite=690, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000515944673679769, 'edge_loss': 0.00012085419293725864, 'loss': 0.0006367988651618361}), AvgIteTime=10.02 secs
+[2026-01-21 00:27:29,974][__main__][INFO] - Training: deform=0, Ite=700, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004894384765066206, 'edge_loss': 0.0001126942690461874, 'loss': 0.0006021327397320419}), AvgIteTime=10.88 secs
+[2026-01-21 00:29:12,469][__main__][INFO] - Training: deform=0, Ite=710, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005104690149892122, 'edge_loss': 0.00011844648252008483, 'loss': 0.0006289154989644885}), AvgIteTime=10.25 secs
+[2026-01-21 00:30:53,064][__main__][INFO] - Training: deform=0, Ite=720, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005104242154629901, 'edge_loss': 0.0001188087000628002, 'loss': 0.000629232922801748}), AvgIteTime=10.06 secs
+[2026-01-21 00:32:34,525][__main__][INFO] - Training: deform=0, Ite=730, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005132316291565076, 'edge_loss': 0.0001210640293720644, 'loss': 0.0006342956621665508}), AvgIteTime=10.15 secs
+[2026-01-21 00:34:16,246][__main__][INFO] - Training: deform=0, Ite=740, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005132534948643297, 'edge_loss': 0.00012107248403481208, 'loss': 0.0006343259708955884}), AvgIteTime=10.17 secs
+[2026-01-21 00:35:57,745][__main__][INFO] - Training: deform=0, Ite=750, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005275872361380606, 'edge_loss': 0.00012027383490931243, 'loss': 0.0006478610739577562}), AvgIteTime=10.15 secs
+[2026-01-21 00:37:28,033][__main__][INFO] - Training: deform=0, Ite=760, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005038506002165377, 'edge_loss': 0.00011325465093250386, 'loss': 0.0006171052547870204}), AvgIteTime=9.03 secs
+[2026-01-21 00:39:08,700][__main__][INFO] - Training: deform=0, Ite=770, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005227518529864028, 'edge_loss': 0.00011874199408339337, 'loss': 0.0006414938485249877}), AvgIteTime=10.06 secs
+[2026-01-21 00:40:49,493][__main__][INFO] - Training: deform=0, Ite=780, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004963473213138059, 'edge_loss': 0.00011593952949624508, 'loss': 0.000612286850810051}), AvgIteTime=10.08 secs
+[2026-01-21 00:42:33,353][__main__][INFO] - Training: deform=0, Ite=790, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005165189766557887, 'edge_loss': 0.00012257453563506714, 'loss': 0.0006390935101080686}), AvgIteTime=10.38 secs
+[2026-01-21 00:44:14,106][__main__][INFO] - Training: deform=0, Ite=800, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004915215744404122, 'edge_loss': 0.0001188738147902768, 'loss': 0.0006103953928686678}), AvgIteTime=10.07 secs
+[2026-01-21 00:45:57,050][__main__][INFO] - Training: deform=0, Ite=810, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005154697922989726, 'edge_loss': 0.00011539771949173883, 'loss': 0.00063086751033552}), AvgIteTime=10.29 secs
+[2026-01-21 00:47:44,594][__main__][INFO] - Training: deform=0, Ite=820, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000491979971411638, 'edge_loss': 0.00011928810708923265, 'loss': 0.000611268071224913}), AvgIteTime=10.74 secs
+[2026-01-21 00:49:27,281][__main__][INFO] - Training: deform=0, Ite=830, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004844111914280802, 'edge_loss': 0.00011312123897369019, 'loss': 0.0005975324311293662}), AvgIteTime=10.27 secs
+[2026-01-21 00:51:10,125][__main__][INFO] - Training: deform=0, Ite=840, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005135935643920675, 'edge_loss': 0.00011984951488557272, 'loss': 0.0006334430712740868}), AvgIteTime=10.28 secs
+[2026-01-21 00:52:52,575][__main__][INFO] - Training: deform=0, Ite=850, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005067889665951953, 'edge_loss': 0.00011859333244501613, 'loss': 0.000625382293947041}), AvgIteTime=10.24 secs
+[2026-01-21 00:54:35,729][__main__][INFO] - Training: deform=0, Ite=860, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005404991388786584, 'edge_loss': 0.00012165289881522767, 'loss': 0.000662152050063014}), AvgIteTime=10.31 secs
+[2026-01-21 00:56:17,669][__main__][INFO] - Training: deform=0, Ite=870, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005154831887921318, 'edge_loss': 0.00012351045297691597, 'loss': 0.0006389936374034732}), AvgIteTime=10.19 secs
+[2026-01-21 00:57:58,505][__main__][INFO] - Training: deform=0, Ite=880, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000490257004275918, 'edge_loss': 0.00011596676922636107, 'loss': 0.0006062237720470875}), AvgIteTime=10.08 secs
+[2026-01-21 00:59:29,879][__main__][INFO] - Training: deform=0, Ite=890, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005201785475946963, 'edge_loss': 0.00011680844036163763, 'loss': 0.0006369869865011424}), AvgIteTime=9.14 secs
+[2026-01-21 01:01:11,121][__main__][INFO] - Training: deform=0, Ite=900, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005141076893778518, 'edge_loss': 0.00011630084045464174, 'loss': 0.0006304085254669189}), AvgIteTime=10.12 secs
+[2026-01-21 01:02:53,885][__main__][INFO] - Training: deform=0, Ite=910, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005046423437306657, 'edge_loss': 0.00011838793579954654, 'loss': 0.0006230302795302122}), AvgIteTime=10.27 secs
+[2026-01-21 01:04:36,654][__main__][INFO] - Training: deform=0, Ite=920, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005034321220591664, 'edge_loss': 0.00011483913185657002, 'loss': 0.0006182712502777576}), AvgIteTime=10.27 secs
+[2026-01-21 01:06:19,487][__main__][INFO] - Training: deform=0, Ite=930, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000502242473885417, 'edge_loss': 0.00012258816495887005, 'loss': 0.0006248306424822658}), AvgIteTime=10.28 secs
+[2026-01-21 01:08:00,943][__main__][INFO] - Training: deform=0, Ite=940, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004927714209770784, 'edge_loss': 0.0001181590647320263, 'loss': 0.0006109304842539132}), AvgIteTime=10.14 secs
+[2026-01-21 01:09:50,871][__main__][INFO] - Training: deform=0, Ite=950, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048367702402174473, 'edge_loss': 0.00011195536426384933, 'loss': 0.0005956323875579983}), AvgIteTime=10.99 secs
+[2026-01-21 01:11:34,839][__main__][INFO] - Training: deform=0, Ite=960, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005272097507258878, 'edge_loss': 0.00012062700116075576, 'loss': 0.0006478367489762604}), AvgIteTime=10.40 secs
+[2026-01-21 01:13:16,774][__main__][INFO] - Training: deform=0, Ite=970, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004948431858792901, 'edge_loss': 0.00011344025042490103, 'loss': 0.0006082834326662124}), AvgIteTime=10.19 secs
+[2026-01-21 01:15:01,217][__main__][INFO] - Training: deform=0, Ite=980, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005116001528222113, 'edge_loss': 0.00012055614351993426, 'loss': 0.0006321563036181032}), AvgIteTime=10.44 secs
+[2026-01-21 01:16:42,422][__main__][INFO] - Training: deform=0, Ite=990, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004969750589225441, 'edge_loss': 0.00011916295334231108, 'loss': 0.0006161380093544722}), AvgIteTime=10.12 secs
+[2026-01-21 01:18:25,772][__main__][INFO] - Training: deform=0, Ite=1000, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005226467968896031, 'edge_loss': 0.00012411003845045344, 'loss': 0.0006467568338848651}), AvgIteTime=10.33 secs
+[2026-01-21 01:19:54,385][__main__][INFO] - Training: deform=0, Ite=1010, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005018140596803278, 'edge_loss': 0.00011929655956919306, 'loss': 0.0006211106199771165}), AvgIteTime=8.86 secs
+[2026-01-21 01:21:33,519][__main__][INFO] - Training: deform=0, Ite=1020, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004943412495777011, 'edge_loss': 0.00011713586136465892, 'loss': 0.0006114771123975516}), AvgIteTime=9.91 secs
+[2026-01-21 01:23:13,689][__main__][INFO] - Training: deform=0, Ite=1030, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004883023066213354, 'edge_loss': 0.00011525697555043734, 'loss': 0.000603559281444177}), AvgIteTime=10.01 secs
+[2026-01-21 01:24:53,563][__main__][INFO] - Training: deform=0, Ite=1040, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005495422956300899, 'edge_loss': 0.00012518707153503784, 'loss': 0.0006747293693479151}), AvgIteTime=9.99 secs
+[2026-01-21 01:26:33,294][__main__][INFO] - Training: deform=0, Ite=1050, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005188828043173998, 'edge_loss': 0.00011984367229160853, 'loss': 0.0006387264758814127}), AvgIteTime=9.97 secs
+[2026-01-21 01:28:13,518][__main__][INFO] - Training: deform=0, Ite=1060, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005067679099738598, 'edge_loss': 0.00011952232598559931, 'loss': 0.0006262902345042676}), AvgIteTime=10.02 secs
+[2026-01-21 01:29:54,354][__main__][INFO] - Training: deform=0, Ite=1070, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047320793673861773, 'edge_loss': 0.00011161219299538061, 'loss': 0.0005848201253684238}), AvgIteTime=10.08 secs
+[2026-01-21 01:31:40,537][__main__][INFO] - Training: deform=0, Ite=1080, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000537928898120299, 'edge_loss': 0.00012837275717174633, 'loss': 0.000666301662568003}), AvgIteTime=10.62 secs
+[2026-01-21 01:33:22,203][__main__][INFO] - Training: deform=0, Ite=1090, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005225882021477446, 'edge_loss': 0.00011817418926511891, 'loss': 0.0006407623935956508}), AvgIteTime=10.17 secs
+[2026-01-21 01:35:03,346][__main__][INFO] - Training: deform=0, Ite=1100, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005083731433842331, 'edge_loss': 0.000118028893484734, 'loss': 0.0006264020339585841}), AvgIteTime=10.11 secs
+[2026-01-21 01:36:43,745][__main__][INFO] - Training: deform=0, Ite=1110, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00046143565268721434, 'edge_loss': 0.00010951756048598327, 'loss': 0.0005709532124456018}), AvgIteTime=10.04 secs
+[2026-01-21 01:38:25,258][__main__][INFO] - Training: deform=0, Ite=1120, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004983508842997253, 'edge_loss': 0.00011759247499867342, 'loss': 0.0006159433687571436}), AvgIteTime=10.15 secs
+[2026-01-21 01:40:06,106][__main__][INFO] - Training: deform=0, Ite=1130, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000520037190290168, 'edge_loss': 0.00012152630733908154, 'loss': 0.0006415635056328028}), AvgIteTime=10.08 secs
+[2026-01-21 01:41:36,530][__main__][INFO] - Training: deform=0, Ite=1140, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004983643186278642, 'edge_loss': 0.00011814650060841814, 'loss': 0.0006165108177810907}), AvgIteTime=9.04 secs
+[2026-01-21 01:43:17,508][__main__][INFO] - Training: deform=0, Ite=1150, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000481032975949347, 'edge_loss': 0.00011341465651639737, 'loss': 0.0005944476346485317}), AvgIteTime=10.10 secs
+[2026-01-21 01:44:58,645][__main__][INFO] - Training: deform=0, Ite=1160, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048612822720315305, 'edge_loss': 0.00011393061722628773, 'loss': 0.0006000588415190578}), AvgIteTime=10.11 secs
+[2026-01-21 01:46:39,353][__main__][INFO] - Training: deform=0, Ite=1170, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004928916227072477, 'edge_loss': 0.00011786232353188098, 'loss': 0.0006107539462391287}), AvgIteTime=10.07 secs
+[2026-01-21 01:48:20,075][__main__][INFO] - Training: deform=0, Ite=1180, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005365020857425407, 'edge_loss': 0.00012299670634092764, 'loss': 0.0006594987760763615}), AvgIteTime=10.07 secs
+[2026-01-21 01:50:01,624][__main__][INFO] - Training: deform=0, Ite=1190, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005259531346382574, 'edge_loss': 0.0001237855445651803, 'loss': 0.0006497386784758419}), AvgIteTime=10.15 secs
+[2026-01-21 01:51:49,013][__main__][INFO] - Training: deform=0, Ite=1200, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000502258277265355, 'edge_loss': 0.00011787136900238692, 'loss': 0.000620129652088508}), AvgIteTime=10.74 secs
+[2026-01-21 01:53:30,117][__main__][INFO] - Training: deform=0, Ite=1210, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005023585341405124, 'edge_loss': 0.00011925645667361095, 'loss': 0.0006216149893589317}), AvgIteTime=10.11 secs
+[2026-01-21 01:55:10,782][__main__][INFO] - Training: deform=0, Ite=1220, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005254833435174078, 'edge_loss': 0.00011800778447650373, 'loss': 0.0006434911279939115}), AvgIteTime=10.07 secs
+[2026-01-21 01:56:53,371][__main__][INFO] - Training: deform=0, Ite=1230, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004726184619357809, 'edge_loss': 0.00011184846080141142, 'loss': 0.0005844669212820008}), AvgIteTime=10.26 secs
+[2026-01-21 01:58:35,335][__main__][INFO] - Training: deform=0, Ite=1240, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005214519769651815, 'edge_loss': 0.00012091315584257245, 'loss': 0.000642365135718137}), AvgIteTime=10.20 secs
+[2026-01-21 02:00:16,445][__main__][INFO] - Training: deform=0, Ite=1250, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004993567708879709, 'edge_loss': 0.00011733170540537686, 'loss': 0.0006166884733829648}), AvgIteTime=10.11 secs
+[2026-01-21 02:01:43,142][__main__][INFO] - Training: deform=0, Ite=1260, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005011328554246575, 'edge_loss': 0.00012139253667555749, 'loss': 0.000622525392100215}), AvgIteTime=8.67 secs
+[2026-01-21 02:03:27,100][__main__][INFO] - Training: deform=0, Ite=1270, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005169159383513033, 'edge_loss': 0.00011988757978542708, 'loss': 0.0006368035217747092}), AvgIteTime=10.40 secs
+[2026-01-21 02:05:08,323][__main__][INFO] - Training: deform=0, Ite=1280, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005096380191389471, 'edge_loss': 0.0001226792490342632, 'loss': 0.0006323172710835934}), AvgIteTime=10.12 secs
+[2026-01-21 02:06:50,373][__main__][INFO] - Training: deform=0, Ite=1290, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004917426937026903, 'edge_loss': 0.00011755336527130567, 'loss': 0.0006092960597015917}), AvgIteTime=10.20 secs
+[2026-01-21 02:08:31,771][__main__][INFO] - Training: deform=0, Ite=1300, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005053962988313288, 'edge_loss': 0.00011924370191991329, 'loss': 0.0006246399891097099}), AvgIteTime=10.14 secs
+[2026-01-21 02:10:12,929][__main__][INFO] - Training: deform=0, Ite=1310, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005237818957539275, 'edge_loss': 0.0001223067389219068, 'loss': 0.0006460886390414089}), AvgIteTime=10.11 secs
+[2026-01-21 02:11:55,630][__main__][INFO] - Training: deform=0, Ite=1320, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005250239395536482, 'edge_loss': 0.00011898527882294729, 'loss': 0.00064400922274217}), AvgIteTime=10.27 secs
+[2026-01-21 02:13:39,690][__main__][INFO] - Training: deform=0, Ite=1330, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047304209147114307, 'edge_loss': 0.0001149380776041653, 'loss': 0.0005879801756236702}), AvgIteTime=10.41 secs
+[2026-01-21 02:15:23,189][__main__][INFO] - Training: deform=0, Ite=1340, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005236886267084628, 'edge_loss': 0.00012141560364398174, 'loss': 0.0006451042369008064}), AvgIteTime=10.35 secs
+[2026-01-21 02:17:05,554][__main__][INFO] - Training: deform=0, Ite=1350, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005113160994369536, 'edge_loss': 0.00011732222701539285, 'loss': 0.0006286383257247507}), AvgIteTime=10.24 secs
+[2026-01-21 02:18:46,315][__main__][INFO] - Training: deform=0, Ite=1360, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004841552290599793, 'edge_loss': 0.00011468829834484495, 'loss': 0.0005988435208564624}), AvgIteTime=10.07 secs
+[2026-01-21 02:20:27,952][__main__][INFO] - Training: deform=0, Ite=1370, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004663015948608518, 'edge_loss': 0.00011270063769188709, 'loss': 0.0005790022230939939}), AvgIteTime=10.16 secs
+[2026-01-21 02:22:10,143][__main__][INFO] - Training: deform=0, Ite=1380, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005181140149943531, 'edge_loss': 0.00012322338880039753, 'loss': 0.0006413373979739845}), AvgIteTime=10.22 secs
+[2026-01-21 02:23:41,697][__main__][INFO] - Training: deform=0, Ite=1390, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048621147288940847, 'edge_loss': 0.00011362948425812647, 'loss': 0.0005998409527819603}), AvgIteTime=9.15 secs
+[2026-01-21 02:25:24,863][__main__][INFO] - Training: deform=0, Ite=1400, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004901069798506797, 'edge_loss': 0.0001171230323961936, 'loss': 0.0006072300137020647}), AvgIteTime=10.31 secs
+[2026-01-21 02:27:07,594][__main__][INFO] - Training: deform=0, Ite=1410, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005086169752757996, 'edge_loss': 0.00011917309384443798, 'loss': 0.0006277900829445571}), AvgIteTime=10.27 secs
+[2026-01-21 02:28:51,410][__main__][INFO] - Training: deform=0, Ite=1420, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005311226879712195, 'edge_loss': 0.00012042392700095661, 'loss': 0.0006515466200653463}), AvgIteTime=10.38 secs
+[2026-01-21 02:30:34,057][__main__][INFO] - Training: deform=0, Ite=1430, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048003565752878784, 'edge_loss': 0.00011325552477501333, 'loss': 0.0005932911823038012}), AvgIteTime=10.26 secs
+[2026-01-21 02:32:16,824][__main__][INFO] - Training: deform=0, Ite=1440, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005214835720835254, 'edge_loss': 0.0001197466961457394, 'loss': 0.0006412302725948393}), AvgIteTime=10.28 secs
+[2026-01-21 02:34:04,014][__main__][INFO] - Training: deform=0, Ite=1450, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004990829271264374, 'edge_loss': 0.00012174337898613885, 'loss': 0.0006208263046573847}), AvgIteTime=10.72 secs
+[2026-01-21 02:35:46,161][__main__][INFO] - Training: deform=0, Ite=1460, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004960956663126126, 'edge_loss': 0.00011796799008152447, 'loss': 0.0006140636513009667}), AvgIteTime=10.21 secs
+[2026-01-21 02:37:28,934][__main__][INFO] - Training: deform=0, Ite=1470, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005134503036970273, 'edge_loss': 0.00011891063986695372, 'loss': 0.0006323609442915768}), AvgIteTime=10.28 secs
+[2026-01-21 02:39:11,519][__main__][INFO] - Training: deform=0, Ite=1480, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005199909501243383, 'edge_loss': 0.00012332717815297656, 'loss': 0.0006433181231841445}), AvgIteTime=10.26 secs
+[2026-01-21 02:40:54,794][__main__][INFO] - Training: deform=0, Ite=1490, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048649074451532213, 'edge_loss': 0.00011448218137957155, 'loss': 0.0006009729229845106}), AvgIteTime=10.33 secs
+[2026-01-21 02:42:37,235][__main__][INFO] - Training: deform=0, Ite=1500, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005080050497781486, 'edge_loss': 0.00012159514226368628, 'loss': 0.0006296001898590476}), AvgIteTime=10.24 secs
+[2026-01-21 02:44:19,662][__main__][INFO] - Training: deform=0, Ite=1510, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005126839299919083, 'edge_loss': 0.000118502010445809, 'loss': 0.0006311859411653131}), AvgIteTime=10.24 secs
+[2026-01-21 02:45:52,164][__main__][INFO] - Training: deform=0, Ite=1520, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000509239241364412, 'edge_loss': 0.00011989042322966271, 'loss': 0.0006291296624112875}), AvgIteTime=9.25 secs
+[2026-01-21 02:47:36,215][__main__][INFO] - Training: deform=0, Ite=1530, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000518744150758721, 'edge_loss': 0.00011960936462855898, 'loss': 0.0006383535219356418}), AvgIteTime=10.40 secs
+[2026-01-21 02:49:20,294][__main__][INFO] - Training: deform=0, Ite=1540, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005369431048166007, 'edge_loss': 0.00012424172382452525, 'loss': 0.0006611848250031472}), AvgIteTime=10.41 secs
+[2026-01-21 02:51:02,515][__main__][INFO] - Training: deform=0, Ite=1550, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048060450935736296, 'edge_loss': 0.0001165220106486231, 'loss': 0.0005971265258267522}), AvgIteTime=10.22 secs
+[2026-01-21 02:52:45,261][__main__][INFO] - Training: deform=0, Ite=1560, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004915542231174186, 'edge_loss': 0.00011297690725768917, 'loss': 0.0006045311340130866}), AvgIteTime=10.27 secs
+[2026-01-21 02:54:27,348][__main__][INFO] - Training: deform=0, Ite=1570, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000483721899217926, 'edge_loss': 0.0001182541840535123, 'loss': 0.0006019760854542256}), AvgIteTime=10.20 secs
+[2026-01-21 02:56:14,391][__main__][INFO] - Training: deform=0, Ite=1580, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005312996509019285, 'edge_loss': 0.00012127157460781746, 'loss': 0.0006525712262373418}), AvgIteTime=10.70 secs
+[2026-01-21 02:57:57,748][__main__][INFO] - Training: deform=0, Ite=1590, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005152871483005584, 'edge_loss': 0.0001224264189659152, 'loss': 0.0006377135694492608}), AvgIteTime=10.33 secs
+[2026-01-21 02:59:41,189][__main__][INFO] - Training: deform=0, Ite=1600, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000495299109024927, 'edge_loss': 0.00011659289812087082, 'loss': 0.0006118920107837766}), AvgIteTime=10.34 secs
+[2026-01-21 03:01:23,234][__main__][INFO] - Training: deform=0, Ite=1610, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004995384428184479, 'edge_loss': 0.00011643725301837548, 'loss': 0.000615975700202398}), AvgIteTime=10.20 secs
+[2026-01-21 03:03:05,042][__main__][INFO] - Training: deform=0, Ite=1620, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005070450279163197, 'edge_loss': 0.00012344620408839547, 'loss': 0.0006304912327323109}), AvgIteTime=10.18 secs
+[2026-01-21 03:04:48,345][__main__][INFO] - Training: deform=0, Ite=1630, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005077499721664935, 'edge_loss': 0.00012169354522484355, 'loss': 0.0006294435122981667}), AvgIteTime=10.33 secs
+[2026-01-21 03:06:19,450][__main__][INFO] - Training: deform=0, Ite=1640, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005101552524138242, 'edge_loss': 0.00011796495891758241, 'loss': 0.0006281202076934278}), AvgIteTime=9.11 secs
+[2026-01-21 03:08:00,308][__main__][INFO] - Training: deform=0, Ite=1650, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004913454031338915, 'edge_loss': 0.00012119422826799564, 'loss': 0.0006125396175775677}), AvgIteTime=10.09 secs
+[2026-01-21 03:09:43,558][__main__][INFO] - Training: deform=0, Ite=1660, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000490874142269604, 'edge_loss': 0.00011556962199392729, 'loss': 0.0006064437620807439}), AvgIteTime=10.32 secs
+[2026-01-21 03:11:27,187][__main__][INFO] - Training: deform=0, Ite=1670, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005394416686613113, 'edge_loss': 0.00012336008658166974, 'loss': 0.0006628017639741301}), AvgIteTime=10.36 secs
+[2026-01-21 03:13:11,281][__main__][INFO] - Training: deform=0, Ite=1680, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004896068974630907, 'edge_loss': 0.00011591740112635308, 'loss': 0.0006055242993170395}), AvgIteTime=10.41 secs
+[2026-01-21 03:14:54,201][__main__][INFO] - Training: deform=0, Ite=1690, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005168554751435294, 'edge_loss': 0.00012258228525752202, 'loss': 0.0006394377560354769}), AvgIteTime=10.29 secs
+[2026-01-21 03:16:37,047][__main__][INFO] - Training: deform=0, Ite=1700, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004899183986708522, 'edge_loss': 0.00011351587163517251, 'loss': 0.000603434257209301}), AvgIteTime=10.28 secs
+[2026-01-21 03:18:27,912][__main__][INFO] - Training: deform=0, Ite=1710, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005040737596573308, 'edge_loss': 0.00011923617421416566, 'loss': 0.000623309938237071}), AvgIteTime=11.09 secs
+[2026-01-21 03:20:10,745][__main__][INFO] - Training: deform=0, Ite=1720, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004896133410511539, 'edge_loss': 0.00011445188210927882, 'loss': 0.0006040652224328369}), AvgIteTime=10.28 secs
+[2026-01-21 03:21:53,456][__main__][INFO] - Training: deform=0, Ite=1730, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004932617506710812, 'edge_loss': 0.00011891709655174055, 'loss': 0.00061217884067446}), AvgIteTime=10.27 secs
+[2026-01-21 03:23:36,700][__main__][INFO] - Training: deform=0, Ite=1740, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005417674721684307, 'edge_loss': 0.00012362799752736465, 'loss': 0.0006653954740613699}), AvgIteTime=10.32 secs
+[2026-01-21 03:25:20,775][__main__][INFO] - Training: deform=0, Ite=1750, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004911676340270787, 'edge_loss': 0.00011764067166950554, 'loss': 0.0006088083027862012}), AvgIteTime=10.41 secs
+[2026-01-21 03:27:04,567][__main__][INFO] - Training: deform=0, Ite=1760, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048699754697736355, 'edge_loss': 0.00011326074745738879, 'loss': 0.0006002582900691778}), AvgIteTime=10.38 secs
+[2026-01-21 03:28:35,981][__main__][INFO] - Training: deform=0, Ite=1770, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004996696312446147, 'edge_loss': 0.00012104329871363007, 'loss': 0.0006207129335962236}), AvgIteTime=9.14 secs
+[2026-01-21 03:30:19,346][__main__][INFO] - Training: deform=0, Ite=1780, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005417409964138642, 'edge_loss': 0.000123272883502068, 'loss': 0.0006650138879194855}), AvgIteTime=10.34 secs
+[2026-01-21 03:32:02,021][__main__][INFO] - Training: deform=0, Ite=1790, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048715877055656166, 'edge_loss': 0.0001147004120866768, 'loss': 0.0006018591811880469}), AvgIteTime=10.26 secs
+[2026-01-21 03:33:45,034][__main__][INFO] - Training: deform=0, Ite=1800, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004915620433166623, 'edge_loss': 0.0001204814230732154, 'loss': 0.0006120434729382396}), AvgIteTime=10.30 secs
+[2026-01-21 03:35:28,653][__main__][INFO] - Training: deform=0, Ite=1810, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004843862378038466, 'edge_loss': 0.00011584932799451053, 'loss': 0.0006002355599775911}), AvgIteTime=10.36 secs
+[2026-01-21 03:37:11,214][__main__][INFO] - Training: deform=0, Ite=1820, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005137833155458793, 'edge_loss': 0.00011939406613237225, 'loss': 0.0006331773824058473}), AvgIteTime=10.26 secs
+[2026-01-21 03:39:00,362][__main__][INFO] - Training: deform=0, Ite=1830, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005005322658689692, 'edge_loss': 0.00012031899968860671, 'loss': 0.0006208512699231505}), AvgIteTime=10.91 secs
+[2026-01-21 03:40:42,172][__main__][INFO] - Training: deform=0, Ite=1840, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004988594766473398, 'edge_loss': 0.00011915232753381133, 'loss': 0.0006180118012707681}), AvgIteTime=10.18 secs
+[2026-01-21 03:42:26,053][__main__][INFO] - Training: deform=0, Ite=1850, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000516352424165234, 'edge_loss': 0.00011915749782929197, 'loss': 0.0006355099263601005}), AvgIteTime=10.39 secs
+[2026-01-21 03:44:11,515][__main__][INFO] - Training: deform=0, Ite=1860, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047972924367059024, 'edge_loss': 0.00011381623116903938, 'loss': 0.0005935454682912678}), AvgIteTime=10.55 secs
+[2026-01-21 03:45:55,867][__main__][INFO] - Training: deform=0, Ite=1870, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005031205975683406, 'edge_loss': 0.00011690318497130648, 'loss': 0.0006200237839948386}), AvgIteTime=10.43 secs
+[2026-01-21 03:47:40,370][__main__][INFO] - Training: deform=0, Ite=1880, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004840036912355572, 'edge_loss': 0.00011707799058058299, 'loss': 0.0006010816781781614}), AvgIteTime=10.45 secs
+[2026-01-21 03:49:09,030][__main__][INFO] - Training: deform=0, Ite=1890, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005035346461227163, 'edge_loss': 0.00011711425831890665, 'loss': 0.0006206489051692188}), AvgIteTime=8.87 secs
+[2026-01-21 03:50:56,344][__main__][INFO] - Training: deform=0, Ite=1900, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000510480863158591, 'edge_loss': 0.00012055026818416081, 'loss': 0.0006310311262495815}), AvgIteTime=10.73 secs
+[2026-01-21 03:52:40,979][__main__][INFO] - Training: deform=0, Ite=1910, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005036515038227662, 'edge_loss': 0.00012179094846942462, 'loss': 0.0006254424573853612}), AvgIteTime=10.46 secs
+[2026-01-21 03:54:24,059][__main__][INFO] - Training: deform=0, Ite=1920, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005094039777759462, 'edge_loss': 0.00012094153644284233, 'loss': 0.000630345509853214}), AvgIteTime=10.31 secs
+[2026-01-21 03:56:07,962][__main__][INFO] - Training: deform=0, Ite=1930, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004963489423971623, 'edge_loss': 0.00011626733103184961, 'loss': 0.0006126162683358416}), AvgIteTime=10.39 secs
+[2026-01-21 03:57:52,146][__main__][INFO] - Training: deform=0, Ite=1940, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000515961114433594, 'edge_loss': 0.00011941349439439363, 'loss': 0.0006353746051900089}), AvgIteTime=10.42 secs
+[2026-01-21 03:59:32,225][__main__][INFO] - Training: deform=0, Ite=1950, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005009033338865265, 'edge_loss': 0.00011865105261676945, 'loss': 0.0006195543857757003}), AvgIteTime=10.01 secs
+[2026-01-21 04:01:17,309][__main__][INFO] - Training: deform=0, Ite=1960, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000506498318281956, 'edge_loss': 0.00011967511236434802, 'loss': 0.0006261734233703464}), AvgIteTime=10.51 secs
+[2026-01-21 04:02:57,897][__main__][INFO] - Training: deform=0, Ite=1970, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048451957700308413, 'edge_loss': 0.00011683977500069887, 'loss': 0.0006013593578245491}), AvgIteTime=10.06 secs
+[2026-01-21 04:04:38,924][__main__][INFO] - Training: deform=0, Ite=1980, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004935981676680967, 'edge_loss': 0.0001130862656282261, 'loss': 0.0006066844245651737}), AvgIteTime=10.10 secs
+[2026-01-21 04:06:19,396][__main__][INFO] - Training: deform=0, Ite=1990, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005081901501398534, 'edge_loss': 0.00011936238006455824, 'loss': 0.0006275525258388371}), AvgIteTime=10.05 secs
+[2026-01-21 04:08:00,867][__main__][INFO] - Training: deform=0, Ite=2000, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004787559824762866, 'edge_loss': 0.00011243110420764424, 'loss': 0.0005911870888667181}), AvgIteTime=10.15 secs
+[2026-01-21 04:09:42,976][__main__][INFO] - Training: deform=0, Ite=2010, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005052686639828608, 'edge_loss': 0.00011973884174949489, 'loss': 0.0006250075006391853}), AvgIteTime=10.21 secs
+[2026-01-21 04:11:12,808][__main__][INFO] - Training: deform=0, Ite=2020, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005043248122092337, 'edge_loss': 0.00011860392405651509, 'loss': 0.0006229287362657487}), AvgIteTime=8.98 secs
+[2026-01-21 04:12:55,153][__main__][INFO] - Training: deform=0, Ite=2030, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00046892551181372256, 'edge_loss': 0.00011386743499315344, 'loss': 0.0005827929475344717}), AvgIteTime=10.23 secs
+[2026-01-21 04:14:37,061][__main__][INFO] - Training: deform=0, Ite=2040, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005272548762150109, 'edge_loss': 0.00012025377727695741, 'loss': 0.0006475086440332234}), AvgIteTime=10.19 secs
+[2026-01-21 04:16:18,574][__main__][INFO] - Training: deform=0, Ite=2050, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005152381287189201, 'edge_loss': 0.00012141097395215183, 'loss': 0.0006366490968503058}), AvgIteTime=10.15 secs
+[2026-01-21 04:18:00,572][__main__][INFO] - Training: deform=0, Ite=2060, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048035052604973317, 'edge_loss': 0.00011601158694247715, 'loss': 0.000596362113719806}), AvgIteTime=10.20 secs
+[2026-01-21 04:19:43,237][__main__][INFO] - Training: deform=0, Ite=2070, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004875380400335416, 'edge_loss': 0.00011630866429186426, 'loss': 0.0006038467050530017}), AvgIteTime=10.27 secs
+[2026-01-21 04:21:28,876][__main__][INFO] - Training: deform=0, Ite=2080, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005202988657401874, 'edge_loss': 0.00012458054188755341, 'loss': 0.0006448794039897621}), AvgIteTime=10.56 secs
+[2026-01-21 04:23:10,930][__main__][INFO] - Training: deform=0, Ite=2090, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047054061142262074, 'edge_loss': 0.00010931004871963523, 'loss': 0.0005798506579594686}), AvgIteTime=10.20 secs
+[2026-01-21 04:24:52,629][__main__][INFO] - Training: deform=0, Ite=2100, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005162481626030058, 'edge_loss': 0.00011938777461182327, 'loss': 0.0006356359401252121}), AvgIteTime=10.17 secs
+[2026-01-21 04:26:34,809][__main__][INFO] - Training: deform=0, Ite=2110, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005021120829042047, 'edge_loss': 0.00012110142852179706, 'loss': 0.0006232135172467678}), AvgIteTime=10.22 secs
+[2026-01-21 04:28:16,872][__main__][INFO] - Training: deform=0, Ite=2120, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004945267253788188, 'edge_loss': 0.00011754885344998911, 'loss': 0.0006120755802839995}), AvgIteTime=10.20 secs
+[2026-01-21 04:29:58,358][__main__][INFO] - Training: deform=0, Ite=2130, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004775823384989053, 'edge_loss': 0.00011545300367288291, 'loss': 0.0005930353509029374}), AvgIteTime=10.15 secs
+[2026-01-21 04:31:39,323][__main__][INFO] - Training: deform=0, Ite=2140, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005196581303607672, 'edge_loss': 0.00012410115959937684, 'loss': 0.0006437592848669738}), AvgIteTime=10.10 secs
+[2026-01-21 04:33:09,494][__main__][INFO] - Training: deform=0, Ite=2150, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004986219224520028, 'edge_loss': 0.00012006493270746432, 'loss': 0.0006186868587974459}), AvgIteTime=9.02 secs
+[2026-01-21 04:34:52,745][__main__][INFO] - Training: deform=0, Ite=2160, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005154692189535126, 'edge_loss': 0.00012323603514232672, 'loss': 0.0006387052533682435}), AvgIteTime=10.32 secs
+[2026-01-21 04:36:33,297][__main__][INFO] - Training: deform=0, Ite=2170, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005002074525691569, 'edge_loss': 0.00011778048356063664, 'loss': 0.0006179879361297935}), AvgIteTime=10.05 secs
+[2026-01-21 04:38:14,415][__main__][INFO] - Training: deform=0, Ite=2180, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005080133123556152, 'edge_loss': 0.00012050683217239566, 'loss': 0.0006285201408900321}), AvgIteTime=10.11 secs
+[2026-01-21 04:39:57,791][__main__][INFO] - Training: deform=0, Ite=2190, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005072516913060098, 'edge_loss': 0.00011521586566232145, 'loss': 0.0006224675569683313}), AvgIteTime=10.34 secs
+[2026-01-21 04:41:39,778][__main__][INFO] - Training: deform=0, Ite=2200, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004944621672620997, 'edge_loss': 0.00011947064558626153, 'loss': 0.0006139328062999994}), AvgIteTime=10.20 secs
+[2026-01-21 04:43:27,114][__main__][INFO] - Training: deform=0, Ite=2210, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004665529733756557, 'edge_loss': 0.00011258127269684338, 'loss': 0.0005791342438897118}), AvgIteTime=10.73 secs
+[2026-01-21 04:45:08,631][__main__][INFO] - Training: deform=0, Ite=2220, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005251807917375118, 'edge_loss': 0.00011889996021636761, 'loss': 0.0006440807483159006}), AvgIteTime=10.15 secs
+[2026-01-21 04:46:49,709][__main__][INFO] - Training: deform=0, Ite=2230, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004982902057236061, 'edge_loss': 0.00011538743565324694, 'loss': 0.0006136776442872361}), AvgIteTime=10.11 secs
+[2026-01-21 04:48:31,736][__main__][INFO] - Training: deform=0, Ite=2240, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005064264085376635, 'edge_loss': 0.00011966051752096974, 'loss': 0.0006260869326069951}), AvgIteTime=10.20 secs
+[2026-01-21 04:50:14,579][__main__][INFO] - Training: deform=0, Ite=2250, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005062846496002749, 'edge_loss': 0.0001241347192262765, 'loss': 0.000630419363733381}), AvgIteTime=10.28 secs
+[2026-01-21 04:51:56,802][__main__][INFO] - Training: deform=0, Ite=2260, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004881364555330947, 'edge_loss': 0.00012052483289153315, 'loss': 0.0006086612760554999}), AvgIteTime=10.22 secs
+[2026-01-21 04:53:28,341][__main__][INFO] - Training: deform=0, Ite=2270, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005050075240433216, 'edge_loss': 0.00011807401169789955, 'loss': 0.0006230815371964127}), AvgIteTime=9.15 secs
+[2026-01-21 04:55:10,654][__main__][INFO] - Training: deform=0, Ite=2280, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048315903113689275, 'edge_loss': 0.0001135369238909334, 'loss': 0.0005966959579382092}), AvgIteTime=10.23 secs
+[2026-01-21 04:56:52,700][__main__][INFO] - Training: deform=0, Ite=2290, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005390601378167048, 'edge_loss': 0.00012198830445413478, 'loss': 0.0006610484386328607}), AvgIteTime=10.20 secs
+[2026-01-21 04:58:34,962][__main__][INFO] - Training: deform=0, Ite=2300, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000490827881731093, 'edge_loss': 0.00011959740440943278, 'loss': 0.0006104252825025469}), AvgIteTime=10.22 secs
+[2026-01-21 05:00:16,188][__main__][INFO] - Training: deform=0, Ite=2310, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004954297764925286, 'edge_loss': 0.00011707855737768114, 'loss': 0.0006125083251390606}), AvgIteTime=10.12 secs
+[2026-01-21 05:01:57,023][__main__][INFO] - Training: deform=0, Ite=2320, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048571586376056075, 'edge_loss': 0.00011583967643673532, 'loss': 0.0006015555409248918}), AvgIteTime=10.08 secs
+[2026-01-21 05:03:39,220][__main__][INFO] - Training: deform=0, Ite=2330, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000505201958003454, 'edge_loss': 0.00012370682597975246, 'loss': 0.0006289087818004191}), AvgIteTime=10.22 secs
+[2026-01-21 05:05:26,953][__main__][INFO] - Training: deform=0, Ite=2340, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004978466749889776, 'edge_loss': 0.00011780575150623917, 'loss': 0.0006156524177640676}), AvgIteTime=10.77 secs
+[2026-01-21 05:07:09,733][__main__][INFO] - Training: deform=0, Ite=2350, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004820066853426397, 'edge_loss': 0.00011426875498727895, 'loss': 0.0005962754308711738}), AvgIteTime=10.28 secs
+[2026-01-21 05:08:51,309][__main__][INFO] - Training: deform=0, Ite=2360, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005123790935613215, 'edge_loss': 0.0001196531557070557, 'loss': 0.0006320322456303984}), AvgIteTime=10.16 secs
+[2026-01-21 05:10:35,106][__main__][INFO] - Training: deform=0, Ite=2370, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004944266518577933, 'edge_loss': 0.00012177989337942563, 'loss': 0.0006162065430544317}), AvgIteTime=10.38 secs
+[2026-01-21 05:12:17,718][__main__][INFO] - Training: deform=0, Ite=2380, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005197941092774272, 'edge_loss': 0.00012304332340136171, 'loss': 0.000642837438499555}), AvgIteTime=10.26 secs
+[2026-01-21 05:14:00,225][__main__][INFO] - Training: deform=0, Ite=2390, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005160557600902393, 'edge_loss': 0.00012168600223958493, 'loss': 0.0006377417681505904}), AvgIteTime=10.25 secs
+[2026-01-21 05:15:32,213][__main__][INFO] - Training: deform=0, Ite=2400, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005174611724214628, 'edge_loss': 0.00012074024634785019, 'loss': 0.0006382014136761427}), AvgIteTime=9.20 secs
+[2026-01-21 05:17:14,558][__main__][INFO] - Training: deform=0, Ite=2410, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004959553654771299, 'edge_loss': 0.00012169387337053194, 'loss': 0.0006176492432132363}), AvgIteTime=10.23 secs
+[2026-01-21 05:18:57,732][__main__][INFO] - Training: deform=0, Ite=2420, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005250932736089453, 'edge_loss': 0.00011657770155579784, 'loss': 0.0006416709686163813}), AvgIteTime=10.32 secs
+[2026-01-21 05:20:41,691][__main__][INFO] - Training: deform=0, Ite=2430, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005026329745305702, 'edge_loss': 0.00012146964290877804, 'loss': 0.0006241026101633906}), AvgIteTime=10.40 secs
+[2026-01-21 05:22:25,932][__main__][INFO] - Training: deform=0, Ite=2440, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005138579872436821, 'edge_loss': 0.00012177173266536556, 'loss': 0.0006356297177262604}), AvgIteTime=10.42 secs
+[2026-01-21 05:24:08,496][__main__][INFO] - Training: deform=0, Ite=2450, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005003615835448727, 'edge_loss': 0.00012267001075088045, 'loss': 0.0006230315892025828}), AvgIteTime=10.26 secs
+[2026-01-21 05:25:58,223][__main__][INFO] - Training: deform=0, Ite=2460, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005401713686296716, 'edge_loss': 0.00012465670952224172, 'loss': 0.0006648280803347006}), AvgIteTime=10.97 secs
+[2026-01-21 05:27:39,772][__main__][INFO] - Training: deform=0, Ite=2470, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004817870707483962, 'edge_loss': 0.00011862704559462145, 'loss': 0.0006004141177982092}), AvgIteTime=10.15 secs
+[2026-01-21 05:29:23,330][__main__][INFO] - Training: deform=0, Ite=2480, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005175316531676799, 'edge_loss': 0.00012346500370767898, 'loss': 0.0006409966619685293}), AvgIteTime=10.36 secs
+[2026-01-21 05:31:05,811][__main__][INFO] - Training: deform=0, Ite=2490, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004933968419209122, 'edge_loss': 0.00011899765813723206, 'loss': 0.0006123945000581444}), AvgIteTime=10.25 secs
+[2026-01-21 05:32:49,500][__main__][INFO] - Training: deform=0, Ite=2500, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004905079898890108, 'edge_loss': 0.0001131678065576125, 'loss': 0.0006036758073605597}), AvgIteTime=10.37 secs
+[2026-01-21 05:34:31,984][__main__][INFO] - Training: deform=0, Ite=2510, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047596071381121873, 'edge_loss': 0.00011582041915971785, 'loss': 0.0005917811329709366}), AvgIteTime=10.25 secs
+[2026-01-21 05:35:59,669][__main__][INFO] - Training: deform=0, Ite=2520, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005132761667482555, 'edge_loss': 0.00011688651939039119, 'loss': 0.0006301626795902848}), AvgIteTime=8.77 secs
+[2026-01-21 05:37:45,436][__main__][INFO] - Training: deform=0, Ite=2530, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004823490686248988, 'edge_loss': 0.0001179491875518579, 'loss': 0.0006002982496283949}), AvgIteTime=10.58 secs
+[2026-01-21 05:39:28,654][__main__][INFO] - Training: deform=0, Ite=2540, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005406857264460996, 'edge_loss': 0.00012307044526096433, 'loss': 0.0006637561717070639}), AvgIteTime=10.32 secs
+[2026-01-21 05:41:12,643][__main__][INFO] - Training: deform=0, Ite=2550, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047880154452286663, 'edge_loss': 0.0001142259658081457, 'loss': 0.0005930275015998632}), AvgIteTime=10.40 secs
+[2026-01-21 05:42:53,983][__main__][INFO] - Training: deform=0, Ite=2560, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005046170001151041, 'edge_loss': 0.00011910707835340872, 'loss': 0.0006237240799237042}), AvgIteTime=10.13 secs
+[2026-01-21 05:44:36,613][__main__][INFO] - Training: deform=0, Ite=2570, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048675957368686794, 'edge_loss': 0.00011680427342071198, 'loss': 0.0006035638507455587}), AvgIteTime=10.26 secs
+[2026-01-21 05:46:19,987][__main__][INFO] - Training: deform=0, Ite=2580, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005122088594362139, 'edge_loss': 0.00012256378322490492, 'loss': 0.0006347726448439062}), AvgIteTime=10.34 secs
+[2026-01-21 05:48:09,849][__main__][INFO] - Training: deform=0, Ite=2590, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000493493615067564, 'edge_loss': 0.00011371677464921959, 'loss': 0.0006072103918995708}), AvgIteTime=10.99 secs
+[2026-01-21 05:49:51,704][__main__][INFO] - Training: deform=0, Ite=2600, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004869364813202992, 'edge_loss': 0.00011911529873032123, 'loss': 0.0006060517742298543}), AvgIteTime=10.18 secs
+[2026-01-21 05:51:35,465][__main__][INFO] - Training: deform=0, Ite=2610, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000512018462177366, 'edge_loss': 0.00011857248900923878, 'loss': 0.0006305909540969878}), AvgIteTime=10.38 secs
+[2026-01-21 05:53:19,800][__main__][INFO] - Training: deform=0, Ite=2620, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005139478686032817, 'edge_loss': 0.0001184159867989365, 'loss': 0.0006323638546746225}), AvgIteTime=10.43 secs
+[2026-01-21 05:55:04,230][__main__][INFO] - Training: deform=0, Ite=2630, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048115255776792765, 'edge_loss': 0.00011813795063062572, 'loss': 0.0005992905120365321}), AvgIteTime=10.44 secs
+[2026-01-21 05:56:48,204][__main__][INFO] - Training: deform=0, Ite=2640, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004693741473602131, 'edge_loss': 0.00011527297829161398, 'loss': 0.0005846471263794229}), AvgIteTime=10.40 secs
+[2026-01-21 05:58:19,690][__main__][INFO] - Training: deform=0, Ite=2650, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005296656512655318, 'edge_loss': 0.0001268184932996519, 'loss': 0.0006564841431099921}), AvgIteTime=9.15 secs
+[2026-01-21 06:00:03,543][__main__][INFO] - Training: deform=0, Ite=2660, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005266484513413161, 'edge_loss': 0.00012538512019091285, 'loss': 0.0006520335620734841}), AvgIteTime=10.38 secs
+[2026-01-21 06:01:46,687][__main__][INFO] - Training: deform=0, Ite=2670, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005024235142627731, 'edge_loss': 0.00011776036117225886, 'loss': 0.0006201838608831167}), AvgIteTime=10.31 secs
+[2026-01-21 06:03:29,068][__main__][INFO] - Training: deform=0, Ite=2680, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004681407648604363, 'edge_loss': 0.00011524479486979544, 'loss': 0.0005833855655509978}), AvgIteTime=10.24 secs
+[2026-01-21 06:05:10,956][__main__][INFO] - Training: deform=0, Ite=2690, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005095913715194911, 'edge_loss': 0.00012090142554370687, 'loss': 0.0006304927926976233}), AvgIteTime=10.19 secs
+[2026-01-21 06:06:54,818][__main__][INFO] - Training: deform=0, Ite=2700, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000515769180492498, 'edge_loss': 0.00011661645621643401, 'loss': 0.0006323856359813362}), AvgIteTime=10.38 secs
+[2026-01-21 06:08:44,626][__main__][INFO] - Training: deform=0, Ite=2710, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004929479502607137, 'edge_loss': 0.00011967595855821855, 'loss': 0.0006126239139121025}), AvgIteTime=10.98 secs
+[2026-01-21 06:10:28,700][__main__][INFO] - Training: deform=0, Ite=2720, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000515342119615525, 'edge_loss': 0.00011890471214428544, 'loss': 0.0006342468375805765}), AvgIteTime=10.41 secs
+[2026-01-21 06:12:12,367][__main__][INFO] - Training: deform=0, Ite=2730, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004947997425915673, 'edge_loss': 0.00011797922488767653, 'loss': 0.0006127789616584778}), AvgIteTime=10.37 secs
+[2026-01-21 06:13:55,273][__main__][INFO] - Training: deform=0, Ite=2740, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005129817931447178, 'edge_loss': 0.00011874999472638592, 'loss': 0.0006317317776847631}), AvgIteTime=10.29 secs
+[2026-01-21 06:15:37,585][__main__][INFO] - Training: deform=0, Ite=2750, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005043070239480584, 'edge_loss': 0.00012305308337090537, 'loss': 0.0006273601145949214}), AvgIteTime=10.23 secs
+[2026-01-21 06:17:22,970][__main__][INFO] - Training: deform=0, Ite=2760, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005037319730035961, 'edge_loss': 0.00011945544829359279, 'loss': 0.0006231874285731465}), AvgIteTime=10.54 secs
+[2026-01-21 06:19:05,971][__main__][INFO] - Training: deform=0, Ite=2770, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000494672852801159, 'edge_loss': 0.00012013558007311076, 'loss': 0.0006148084299638868}), AvgIteTime=10.30 secs
+[2026-01-21 06:20:36,393][__main__][INFO] - Training: deform=0, Ite=2780, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000505852943751961, 'edge_loss': 0.00011991722858510912, 'loss': 0.000625770166516304}), AvgIteTime=9.04 secs
+[2026-01-21 06:22:15,014][__main__][INFO] - Training: deform=0, Ite=2790, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004974336101440713, 'edge_loss': 0.00012109506424167194, 'loss': 0.0006185286678373813}), AvgIteTime=9.86 secs
+[2026-01-21 06:23:53,633][__main__][INFO] - Training: deform=0, Ite=2800, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004907098889816552, 'edge_loss': 0.00011911501424037852, 'loss': 0.000609824899584055}), AvgIteTime=9.86 secs
+[2026-01-21 06:25:34,437][__main__][INFO] - Training: deform=0, Ite=2810, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047681812720838933, 'edge_loss': 0.00011495438520796597, 'loss': 0.0005917725211475044}), AvgIteTime=10.08 secs
+[2026-01-21 06:27:15,083][__main__][INFO] - Training: deform=0, Ite=2820, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005015144968638196, 'edge_loss': 0.00011538885446498171, 'loss': 0.0006169033527839929}), AvgIteTime=10.06 secs
+[2026-01-21 06:28:55,226][__main__][INFO] - Training: deform=0, Ite=2830, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005114209634484723, 'edge_loss': 0.00012084923218935728, 'loss': 0.0006322701927274465}), AvgIteTime=10.01 secs
+[2026-01-21 06:30:40,104][__main__][INFO] - Training: deform=0, Ite=2840, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005123040697071702, 'edge_loss': 0.00011742008646251634, 'loss': 0.0006297241547144949}), AvgIteTime=10.48 secs
+[2026-01-21 06:32:21,083][__main__][INFO] - Training: deform=0, Ite=2850, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005020548851462081, 'edge_loss': 0.00012111964097130112, 'loss': 0.000623174523934722}), AvgIteTime=10.10 secs
+[2026-01-21 06:34:00,612][__main__][INFO] - Training: deform=0, Ite=2860, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004912564909318462, 'edge_loss': 0.00011720251568476669, 'loss': 0.0006084590044338256}), AvgIteTime=9.95 secs
+[2026-01-21 06:35:41,285][__main__][INFO] - Training: deform=0, Ite=2870, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005032872693846002, 'edge_loss': 0.00012170389964012429, 'loss': 0.0006249911792110651}), AvgIteTime=10.07 secs
+[2026-01-21 06:37:22,271][__main__][INFO] - Training: deform=0, Ite=2880, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004961536265909672, 'edge_loss': 0.0001208583293191623, 'loss': 0.0006170119624584914}), AvgIteTime=10.10 secs
+[2026-01-21 06:39:04,001][__main__][INFO] - Training: deform=0, Ite=2890, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004951857030391693, 'edge_loss': 0.00011410650477046147, 'loss': 0.0006092922063544393}), AvgIteTime=10.17 secs
+[2026-01-21 06:40:33,876][__main__][INFO] - Training: deform=0, Ite=2900, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004974487324943766, 'edge_loss': 0.000115306146471994, 'loss': 0.0006127548811491578}), AvgIteTime=8.99 secs
+[2026-01-21 06:42:16,069][__main__][INFO] - Training: deform=0, Ite=2910, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005247526831226423, 'edge_loss': 0.0001203551837534178, 'loss': 0.0006451078632380813}), AvgIteTime=10.22 secs
+[2026-01-21 06:43:55,280][__main__][INFO] - Training: deform=0, Ite=2920, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004987886000890285, 'edge_loss': 0.0001236608914041426, 'loss': 0.0006224494893103838}), AvgIteTime=9.92 secs
+[2026-01-21 06:45:35,747][__main__][INFO] - Training: deform=0, Ite=2930, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00046016789274290205, 'edge_loss': 0.00011384580793674103, 'loss': 0.0005740136897657066}), AvgIteTime=10.05 secs
+[2026-01-21 06:47:17,362][__main__][INFO] - Training: deform=0, Ite=2940, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005032300890889019, 'edge_loss': 0.00011524982182891108, 'loss': 0.0006184799101902172}), AvgIteTime=10.16 secs
+[2026-01-21 06:48:58,676][__main__][INFO] - Training: deform=0, Ite=2950, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000499892293009907, 'edge_loss': 0.00012004075979348272, 'loss': 0.0006199330557137728}), AvgIteTime=10.13 secs
+[2026-01-21 06:50:39,327][__main__][INFO] - Training: deform=0, Ite=2960, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004953985480824485, 'edge_loss': 0.00011482069967314601, 'loss': 0.0006102192448452115}), AvgIteTime=10.06 secs
+[2026-01-21 06:52:26,886][__main__][INFO] - Training: deform=0, Ite=2970, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004792682797415182, 'edge_loss': 0.00011228245930396951, 'loss': 0.0005915507441386581}), AvgIteTime=10.75 secs
+[2026-01-21 06:54:07,792][__main__][INFO] - Training: deform=0, Ite=2980, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005117964203236625, 'edge_loss': 0.00012555937137221919, 'loss': 0.0006373557902406901}), AvgIteTime=10.09 secs
+[2026-01-21 06:55:49,656][__main__][INFO] - Training: deform=0, Ite=2990, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005077411013189703, 'edge_loss': 0.00012063259200658649, 'loss': 0.0006283736962359399}), AvgIteTime=10.19 secs
+[2026-01-21 06:57:30,961][__main__][INFO] - Training: deform=0, Ite=3000, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005158757645403967, 'edge_loss': 0.00012281382805667818, 'loss': 0.0006386895955074578}), AvgIteTime=10.13 secs
+[2026-01-21 06:59:13,573][__main__][INFO] - Training: deform=0, Ite=3010, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005306957958964631, 'edge_loss': 0.00012077932042302564, 'loss': 0.000651475106133148}), AvgIteTime=10.26 secs
+[2026-01-21 07:00:54,158][__main__][INFO] - Training: deform=0, Ite=3020, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005023199511924759, 'edge_loss': 0.00012353702768450603, 'loss': 0.0006258569774217904}), AvgIteTime=10.06 secs
+[2026-01-21 07:02:22,379][__main__][INFO] - Training: deform=0, Ite=3030, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004963894432876259, 'edge_loss': 0.0001203031737532001, 'loss': 0.0006166926235891878}), AvgIteTime=8.82 secs
+[2026-01-21 07:04:03,564][__main__][INFO] - Training: deform=0, Ite=3040, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005323883553501219, 'edge_loss': 0.00012333301274338737, 'loss': 0.0006557213724590838}), AvgIteTime=10.12 secs
+[2026-01-21 07:05:45,112][__main__][INFO] - Training: deform=0, Ite=3050, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000505099431029521, 'edge_loss': 0.00011697007357724942, 'loss': 0.0006220694980584085}), AvgIteTime=10.15 secs
+[2026-01-21 07:07:26,550][__main__][INFO] - Training: deform=0, Ite=3060, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004980958561645821, 'edge_loss': 0.0001238474025740288, 'loss': 0.0006219432689249516}), AvgIteTime=10.14 secs
+[2026-01-21 07:09:07,219][__main__][INFO] - Training: deform=0, Ite=3070, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004916576581308618, 'edge_loss': 0.00011643238030956127, 'loss': 0.0006080900406232103}), AvgIteTime=10.07 secs
+[2026-01-21 07:10:49,401][__main__][INFO] - Training: deform=0, Ite=3080, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005081857612822205, 'edge_loss': 0.00012061702364007942, 'loss': 0.0006288027798291296}), AvgIteTime=10.22 secs
+[2026-01-21 07:12:36,079][__main__][INFO] - Training: deform=0, Ite=3090, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004868913209065795, 'edge_loss': 0.00011562837535166182, 'loss': 0.0006025196926202625}), AvgIteTime=10.67 secs
+[2026-01-21 07:14:16,883][__main__][INFO] - Training: deform=0, Ite=3100, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00045750670833513143, 'edge_loss': 0.00011226616334170103, 'loss': 0.0005697728716768325}), AvgIteTime=10.08 secs
+[2026-01-21 07:15:58,582][__main__][INFO] - Training: deform=0, Ite=3110, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005113343708217144, 'edge_loss': 0.0001223636973008979, 'loss': 0.0006336980557534843}), AvgIteTime=10.17 secs
+[2026-01-21 07:17:41,174][__main__][INFO] - Training: deform=0, Ite=3120, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048213893023785204, 'edge_loss': 0.00011078491079388186, 'loss': 0.0005929238279350102}), AvgIteTime=10.26 secs
+[2026-01-21 07:19:23,070][__main__][INFO] - Training: deform=0, Ite=3130, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004998082004021853, 'edge_loss': 0.0001181569867185317, 'loss': 0.0006179651769343764}), AvgIteTime=10.19 secs
+[2026-01-21 07:21:05,798][__main__][INFO] - Training: deform=0, Ite=3140, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004989630862837658, 'edge_loss': 0.00012182507853140124, 'loss': 0.0006207881611771882}), AvgIteTime=10.27 secs
+[2026-01-21 07:22:33,245][__main__][INFO] - Training: deform=0, Ite=3150, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005288501793984324, 'edge_loss': 0.00012397052269079721, 'loss': 0.0006528206984512507}), AvgIteTime=8.74 secs
+[2026-01-21 07:24:19,343][__main__][INFO] - Training: deform=0, Ite=3160, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004938215104630217, 'edge_loss': 0.00011889379675267264, 'loss': 0.0006127153057605029}), AvgIteTime=10.61 secs
+[2026-01-21 07:26:01,495][__main__][INFO] - Training: deform=0, Ite=3170, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004980968165909872, 'edge_loss': 0.00012089982919860631, 'loss': 0.0006189966457895935}), AvgIteTime=10.21 secs
+[2026-01-21 07:27:43,837][__main__][INFO] - Training: deform=0, Ite=3180, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005239123885985464, 'edge_loss': 0.00012214595844852738, 'loss': 0.0006460583477746695}), AvgIteTime=10.23 secs
+[2026-01-21 07:29:26,532][__main__][INFO] - Training: deform=0, Ite=3190, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000528099003713578, 'edge_loss': 0.0001226089458214119, 'loss': 0.0006507079524453729}), AvgIteTime=10.27 secs
+[2026-01-21 07:31:05,069][__main__][INFO] - Training: deform=0, Ite=3200, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005034427740611136, 'edge_loss': 0.000122457883117022, 'loss': 0.0006259006622713059}), AvgIteTime=9.85 secs
+[2026-01-21 07:32:45,663][__main__][INFO] - Training: deform=0, Ite=3210, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005165876646060497, 'edge_loss': 0.0001225755004270468, 'loss': 0.0006391631730366498}), AvgIteTime=10.06 secs
+[2026-01-21 07:34:31,593][__main__][INFO] - Training: deform=0, Ite=3220, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005039258656324818, 'edge_loss': 0.00012130645336583257, 'loss': 0.0006252323160879314}), AvgIteTime=10.59 secs
+[2026-01-21 07:36:11,065][__main__][INFO] - Training: deform=0, Ite=3230, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004690103407483548, 'edge_loss': 0.00011332591966493056, 'loss': 0.0005823362560477107}), AvgIteTime=9.94 secs
+[2026-01-21 07:37:51,979][__main__][INFO] - Training: deform=0, Ite=3240, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004969149129465222, 'edge_loss': 0.0001188922360597644, 'loss': 0.0006158071337267756}), AvgIteTime=10.09 secs
+[2026-01-21 07:39:32,563][__main__][INFO] - Training: deform=0, Ite=3250, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004960510967066511, 'edge_loss': 0.00011577628247323446, 'loss': 0.0006118273828178644}), AvgIteTime=10.06 secs
+[2026-01-21 07:41:14,285][__main__][INFO] - Training: deform=0, Ite=3260, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048184228653553874, 'edge_loss': 0.00011387943523004651, 'loss': 0.0005957217188552022}), AvgIteTime=10.17 secs
+[2026-01-21 07:42:54,395][__main__][INFO] - Training: deform=0, Ite=3270, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005047423241194337, 'edge_loss': 0.00012134473436162808, 'loss': 0.0006260870723053813}), AvgIteTime=10.01 secs
+[2026-01-21 07:44:22,513][__main__][INFO] - Training: deform=0, Ite=3280, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00051635286945384, 'edge_loss': 0.00012014231615466996, 'loss': 0.0006364951841533184}), AvgIteTime=8.81 secs
+[2026-01-21 07:46:03,011][__main__][INFO] - Training: deform=0, Ite=3290, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004953703930368647, 'edge_loss': 0.0001189873379189521, 'loss': 0.0006143577280454338}), AvgIteTime=10.05 secs
+[2026-01-21 07:47:43,264][__main__][INFO] - Training: deform=0, Ite=3300, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048272173735313116, 'edge_loss': 0.00011794116435339674, 'loss': 0.0006006628915201873}), AvgIteTime=10.02 secs
+[2026-01-21 07:49:23,897][__main__][INFO] - Training: deform=0, Ite=3310, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000501985420123674, 'edge_loss': 0.00012024680836475454, 'loss': 0.0006222322292160243}), AvgIteTime=10.06 secs
+[2026-01-21 07:51:03,224][__main__][INFO] - Training: deform=0, Ite=3320, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000489134670351632, 'edge_loss': 0.00011411765444790944, 'loss': 0.0006032523233443499}), AvgIteTime=9.93 secs
+[2026-01-21 07:52:44,251][__main__][INFO] - Training: deform=0, Ite=3330, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005032611166825518, 'edge_loss': 0.00012074759506504051, 'loss': 0.0006240087212063372}), AvgIteTime=10.10 secs
+[2026-01-21 07:54:30,178][__main__][INFO] - Training: deform=0, Ite=3340, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004968506400473416, 'edge_loss': 0.00011750963967642747, 'loss': 0.0006143602717202157}), AvgIteTime=10.59 secs
+[2026-01-21 07:56:10,756][__main__][INFO] - Training: deform=0, Ite=3350, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047796476283110676, 'edge_loss': 0.00011576898323255591, 'loss': 0.0005937337380601093}), AvgIteTime=10.06 secs
+[2026-01-21 07:57:52,036][__main__][INFO] - Training: deform=0, Ite=3360, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005239057267317548, 'edge_loss': 0.00012115579083911143, 'loss': 0.000645061518298462}), AvgIteTime=10.13 secs
+[2026-01-21 07:59:33,023][__main__][INFO] - Training: deform=0, Ite=3370, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048516970709897576, 'edge_loss': 0.00011390646759537048, 'loss': 0.0005990761768771335}), AvgIteTime=10.10 secs
+[2026-01-21 08:01:13,824][__main__][INFO] - Training: deform=0, Ite=3380, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005184532841667533, 'edge_loss': 0.00012140708713559434, 'loss': 0.0006398603727575392}), AvgIteTime=10.08 secs
+[2026-01-21 08:02:54,080][__main__][INFO] - Training: deform=0, Ite=3390, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004644598579034209, 'edge_loss': 0.00010926805407507345, 'loss': 0.0005737279134336859}), AvgIteTime=10.02 secs
+[2026-01-21 08:04:33,499][__main__][INFO] - Training: deform=0, Ite=3400, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004997077281586826, 'edge_loss': 0.00012628372642211615, 'loss': 0.0006259914487600326}), AvgIteTime=9.94 secs
+[2026-01-21 08:06:04,163][__main__][INFO] - Training: deform=0, Ite=3410, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047346485953312365, 'edge_loss': 0.00011403698299545794, 'loss': 0.0005875018367078155}), AvgIteTime=9.07 secs
+[2026-01-21 08:07:44,381][__main__][INFO] - Training: deform=0, Ite=3420, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004931456292979419, 'edge_loss': 0.00011672581676975824, 'loss': 0.0006098714482504874}), AvgIteTime=10.02 secs
+[2026-01-21 08:09:25,679][__main__][INFO] - Training: deform=0, Ite=3430, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005003276804927736, 'edge_loss': 0.00011954860092373565, 'loss': 0.0006198762857820839}), AvgIteTime=10.13 secs
+[2026-01-21 08:11:06,560][__main__][INFO] - Training: deform=0, Ite=3440, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004768613347550854, 'edge_loss': 0.0001146153372246772, 'loss': 0.0005914766690693796}), AvgIteTime=10.09 secs
+[2026-01-21 08:12:47,681][__main__][INFO] - Training: deform=0, Ite=3450, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005353722226573154, 'edge_loss': 0.00012499874210334383, 'loss': 0.0006603709654882551}), AvgIteTime=10.11 secs
+[2026-01-21 08:14:29,272][__main__][INFO] - Training: deform=0, Ite=3460, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005066147336037829, 'edge_loss': 0.0001210599031765014, 'loss': 0.0006276746396906673}), AvgIteTime=10.16 secs
+[2026-01-21 08:16:16,419][__main__][INFO] - Training: deform=0, Ite=3470, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005111743841553107, 'edge_loss': 0.00012372915080050007, 'loss': 0.0006349035305902362}), AvgIteTime=10.71 secs
+[2026-01-21 08:17:57,214][__main__][INFO] - Training: deform=0, Ite=3480, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004872596706263721, 'edge_loss': 0.00011862969913636334, 'loss': 0.0006058893632143736}), AvgIteTime=10.08 secs
+[2026-01-21 08:19:37,451][__main__][INFO] - Training: deform=0, Ite=3490, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048549885395914315, 'edge_loss': 0.00011642842728178948, 'loss': 0.0006019272841513157}), AvgIteTime=10.02 secs
+[2026-01-21 08:21:18,621][__main__][INFO] - Training: deform=0, Ite=3500, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004826799005968496, 'edge_loss': 0.00011901501784450375, 'loss': 0.0006016949133481831}), AvgIteTime=10.12 secs
+[2026-01-21 08:23:01,266][__main__][INFO] - Training: deform=0, Ite=3510, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005101950577227399, 'edge_loss': 0.00011874611882376485, 'loss': 0.0006289411801844835}), AvgIteTime=10.26 secs
+[2026-01-21 08:24:44,044][__main__][INFO] - Training: deform=0, Ite=3520, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00055157890310511, 'edge_loss': 0.00012719415535684676, 'loss': 0.0006787730613723397}), AvgIteTime=10.28 secs
+[2026-01-21 08:26:14,886][__main__][INFO] - Training: deform=0, Ite=3530, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004932326526613906, 'edge_loss': 0.00011689554376062005, 'loss': 0.0006101281906012446}), AvgIteTime=9.08 secs
+[2026-01-21 08:27:56,479][__main__][INFO] - Training: deform=0, Ite=3540, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005114568222779781, 'edge_loss': 0.0001230632682563737, 'loss': 0.0006345200876239687}), AvgIteTime=10.16 secs
+[2026-01-21 08:29:37,779][__main__][INFO] - Training: deform=0, Ite=3550, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004905267676804214, 'edge_loss': 0.00011311837588436901, 'loss': 0.0006036451464751736}), AvgIteTime=10.13 secs
+[2026-01-21 08:31:19,091][__main__][INFO] - Training: deform=0, Ite=3560, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005290216096909717, 'edge_loss': 0.00012351745826890692, 'loss': 0.0006525390723254532}), AvgIteTime=10.13 secs
+[2026-01-21 08:33:01,512][__main__][INFO] - Training: deform=0, Ite=3570, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004992684116587043, 'edge_loss': 0.00012488520587794483, 'loss': 0.0006241536175366491}), AvgIteTime=10.24 secs
+[2026-01-21 08:34:43,439][__main__][INFO] - Training: deform=0, Ite=3580, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005172506585950032, 'edge_loss': 0.00012253416134626604, 'loss': 0.0006397848192136735}), AvgIteTime=10.19 secs
+[2026-01-21 08:36:25,222][__main__][INFO] - Training: deform=0, Ite=3590, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047350192035082727, 'edge_loss': 0.0001132558099925518, 'loss': 0.0005867577332537621}), AvgIteTime=10.18 secs
+[2026-01-21 08:38:14,266][__main__][INFO] - Training: deform=0, Ite=3600, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005008999723941088, 'edge_loss': 0.0001172730393591337, 'loss': 0.0006181730015669018}), AvgIteTime=10.90 secs
+[2026-01-21 08:39:57,300][__main__][INFO] - Training: deform=0, Ite=3610, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005271890229778364, 'edge_loss': 0.0001268104446353391, 'loss': 0.0006539994676131756}), AvgIteTime=10.30 secs
+[2026-01-21 08:41:39,755][__main__][INFO] - Training: deform=0, Ite=3620, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004874036036198959, 'edge_loss': 0.00011869426889461465, 'loss': 0.0006060978746972978}), AvgIteTime=10.24 secs
+[2026-01-21 08:43:22,224][__main__][INFO] - Training: deform=0, Ite=3630, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005013775720726698, 'edge_loss': 0.00011858120269607753, 'loss': 0.0006199587776791304}), AvgIteTime=10.25 secs
+[2026-01-21 08:45:03,575][__main__][INFO] - Training: deform=0, Ite=3640, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004760814132168889, 'edge_loss': 0.00011171303776791319, 'loss': 0.0005877944524399937}), AvgIteTime=10.13 secs
+[2026-01-21 08:46:47,396][__main__][INFO] - Training: deform=0, Ite=3650, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000477303346269764, 'edge_loss': 0.00011535672456375323, 'loss': 0.0005926600657403469}), AvgIteTime=10.38 secs
+[2026-01-21 08:48:18,781][__main__][INFO] - Training: deform=0, Ite=3660, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004956788994604722, 'edge_loss': 0.0001177677055238746, 'loss': 0.0006134466093499213}), AvgIteTime=9.14 secs
+[2026-01-21 08:50:01,871][__main__][INFO] - Training: deform=0, Ite=3670, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005074693297501653, 'edge_loss': 0.00012029868448735215, 'loss': 0.0006277680105995387}), AvgIteTime=10.31 secs
+[2026-01-21 08:51:43,268][__main__][INFO] - Training: deform=0, Ite=3680, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004689052700996399, 'edge_loss': 0.00011675114365061745, 'loss': 0.0005856564210262149}), AvgIteTime=10.14 secs
+[2026-01-21 08:53:27,457][__main__][INFO] - Training: deform=0, Ite=3690, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005053769826190546, 'edge_loss': 0.00011826965128420852, 'loss': 0.0006236466346308589}), AvgIteTime=10.42 secs
+[2026-01-21 08:55:11,414][__main__][INFO] - Training: deform=0, Ite=3700, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005106192198581994, 'edge_loss': 0.00012232619192218409, 'loss': 0.000632945419056341}), AvgIteTime=10.40 secs
+[2026-01-21 08:56:53,954][__main__][INFO] - Training: deform=0, Ite=3710, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004952902701916174, 'edge_loss': 0.00011714444699464365, 'loss': 0.0006124347157310695}), AvgIteTime=10.25 secs
+[2026-01-21 08:58:43,083][__main__][INFO] - Training: deform=0, Ite=3720, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005038564355345443, 'edge_loss': 0.00011923159618163482, 'loss': 0.0006230880215298384}), AvgIteTime=10.91 secs
+[2026-01-21 09:00:25,045][__main__][INFO] - Training: deform=0, Ite=3730, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005269554065307602, 'edge_loss': 0.00012648301271838135, 'loss': 0.0006534384097903967}), AvgIteTime=10.20 secs
+[2026-01-21 09:02:07,600][__main__][INFO] - Training: deform=0, Ite=3740, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00048803532845340667, 'edge_loss': 0.00011660740346997045, 'loss': 0.0006046427355613559}), AvgIteTime=10.25 secs
+[2026-01-21 09:03:49,714][__main__][INFO] - Training: deform=0, Ite=3750, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004895947990007698, 'edge_loss': 0.00011868556393892504, 'loss': 0.00060828035348095}), AvgIteTime=10.21 secs
+[2026-01-21 09:05:32,325][__main__][INFO] - Training: deform=0, Ite=3760, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005022984405513853, 'edge_loss': 0.00011540108098415658, 'loss': 0.0006176995229907334}), AvgIteTime=10.26 secs
+[2026-01-21 09:07:14,329][__main__][INFO] - Training: deform=0, Ite=3770, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005275579926092178, 'edge_loss': 0.00012529308150988072, 'loss': 0.0006528510712087154}), AvgIteTime=10.20 secs
+[2026-01-21 09:08:43,055][__main__][INFO] - Training: deform=0, Ite=3780, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005095856467960402, 'edge_loss': 0.00012238186827744356, 'loss': 0.0006319675187114627}), AvgIteTime=8.87 secs
+[2026-01-21 09:10:28,231][__main__][INFO] - Training: deform=0, Ite=3790, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004994197253836319, 'edge_loss': 0.00012278424837859349, 'loss': 0.0006222039752174169}), AvgIteTime=10.52 secs
+[2026-01-21 09:12:10,340][__main__][INFO] - Training: deform=0, Ite=3800, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047457009495701643, 'edge_loss': 0.00011395649853511714, 'loss': 0.0005885265971301123}), AvgIteTime=10.21 secs
+[2026-01-21 09:13:53,560][__main__][INFO] - Training: deform=0, Ite=3810, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005110851256176829, 'edge_loss': 0.00011472842743387446, 'loss': 0.0006258135428652168}), AvgIteTime=10.32 secs
+[2026-01-21 09:15:35,264][__main__][INFO] - Training: deform=0, Ite=3820, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004496041627135128, 'edge_loss': 0.00010863656789297237, 'loss': 0.0005582407407928258}), AvgIteTime=10.17 secs
+[2026-01-21 09:17:18,579][__main__][INFO] - Training: deform=0, Ite=3830, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005072837840998546, 'edge_loss': 0.00012329419114394115, 'loss': 0.0006305779737886041}), AvgIteTime=10.33 secs
+[2026-01-21 09:19:01,232][__main__][INFO] - Training: deform=0, Ite=3840, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005124032875755801, 'edge_loss': 0.00012243669771123679, 'loss': 0.000634839991107583}), AvgIteTime=10.26 secs
+[2026-01-21 09:20:49,239][__main__][INFO] - Training: deform=0, Ite=3850, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004986898566130549, 'edge_loss': 0.00012109606104786508, 'loss': 0.0006197859183885157}), AvgIteTime=10.80 secs
+[2026-01-21 09:22:32,939][__main__][INFO] - Training: deform=0, Ite=3860, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004941070103086532, 'edge_loss': 0.00011754280203604139, 'loss': 0.0006116498087067157}), AvgIteTime=10.37 secs
+[2026-01-21 09:24:16,350][__main__][INFO] - Training: deform=0, Ite=3870, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005267662374535576, 'edge_loss': 0.00012641136272577568, 'loss': 0.0006531775987241417}), AvgIteTime=10.34 secs
+[2026-01-21 09:25:59,955][__main__][INFO] - Training: deform=0, Ite=3880, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004826236836379394, 'edge_loss': 0.00011411622472223826, 'loss': 0.0005967399076325819}), AvgIteTime=10.36 secs
+[2026-01-21 09:27:43,151][__main__][INFO] - Training: deform=0, Ite=3890, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004917452082736417, 'edge_loss': 0.00011921765108127146, 'loss': 0.0006109628477133811}), AvgIteTime=10.32 secs
+[2026-01-21 09:29:27,807][__main__][INFO] - Training: deform=0, Ite=3900, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005111760314321145, 'edge_loss': 0.00012051469457219355, 'loss': 0.0006316907296422869}), AvgIteTime=10.46 secs
+[2026-01-21 09:31:00,690][__main__][INFO] - Training: deform=0, Ite=3910, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004903736844426021, 'edge_loss': 0.00011674082197714597, 'loss': 0.0006071145005989819}), AvgIteTime=9.29 secs
+[2026-01-21 09:32:44,316][__main__][INFO] - Training: deform=0, Ite=3920, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005398204462835565, 'edge_loss': 0.00012845011442550459, 'loss': 0.0006682705599814654}), AvgIteTime=10.36 secs
+[2026-01-21 09:34:29,026][__main__][INFO] - Training: deform=0, Ite=3930, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.000511373218614608, 'edge_loss': 0.0001213638977787923, 'loss': 0.0006327371054794639}), AvgIteTime=10.47 secs
+[2026-01-21 09:36:12,581][__main__][INFO] - Training: deform=0, Ite=3940, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005013841873733327, 'edge_loss': 0.0001208673551445827, 'loss': 0.0006222515483386814}), AvgIteTime=10.35 secs
+[2026-01-21 09:37:56,852][__main__][INFO] - Training: deform=0, Ite=3950, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004932679061312228, 'edge_loss': 0.00011592343944357708, 'loss': 0.0006091913412092254}), AvgIteTime=10.43 secs
+[2026-01-21 09:39:40,913][__main__][INFO] - Training: deform=0, Ite=3960, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.00047332689864560963, 'edge_loss': 0.0001147941562521737, 'loss': 0.000588121049804613}), AvgIteTime=10.41 secs
+[2026-01-21 09:41:27,513][__main__][INFO] - Training: deform=0, Ite=3970, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005131890153279528, 'edge_loss': 0.0001218243662151508, 'loss': 0.0006350133800879121}), AvgIteTime=10.66 secs
+[2026-01-21 09:43:04,594][__main__][INFO] - Training: deform=0, Ite=3980, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004918228776659816, 'edge_loss': 0.00011823826353065669, 'loss': 0.0006100611528381706}), AvgIteTime=9.71 secs
+[2026-01-21 09:44:45,285][__main__][INFO] - Training: deform=0, Ite=3990, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005123349721543491, 'edge_loss': 0.00011874310876009986, 'loss': 0.0006310780852800235}), AvgIteTime=10.07 secs
+[2026-01-21 09:46:25,405][__main__][INFO] - Training: deform=0, Ite=4000, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004905355424853041, 'edge_loss': 0.00011510234471643344, 'loss': 0.000605637882836163}), AvgIteTime=10.01 secs
+[2026-01-21 09:48:05,631][__main__][INFO] - Training: deform=0, Ite=4010, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005040381540311501, 'edge_loss': 0.00012058438223903068, 'loss': 0.000624622538452968}), AvgIteTime=10.02 secs
+[2026-01-21 09:49:44,981][__main__][INFO] - Training: deform=0, Ite=4020, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004945715743815526, 'edge_loss': 0.00012039540888508782, 'loss': 0.000614966987632215}), AvgIteTime=9.93 secs
+[2026-01-21 09:51:23,547][__main__][INFO] - Training: deform=0, Ite=4030, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0005000885197659954, 'edge_loss': 0.00011977629183093085, 'loss': 0.0006198648072313518}), AvgIteTime=9.86 secs
+[2026-01-21 09:52:55,364][__main__][INFO] - Training: deform=0, Ite=4040, Losses=defaultdict(<class 'float'>, {'chamffer_points': 0.0004838683526031673, 'edge_loss': 0.000119240656204056, 'loss': 0.0006031090044416488}), AvgIteTime=9.18 secs

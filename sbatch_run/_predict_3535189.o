@@ -1,0 +1,204 @@
+[2026-01-21 14:51:33,105][__main__][INFO] - Predicting surfaces with Cortical Flow
+Config:
+user_config: /public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/code/CorticalFlow++/corticalflow/resources/config_samples/CFPP_predict_lh_5T_inner.yaml
+inputs:
+  data_type: 5T
+  path: <input_path_format>
+  split_name: test
+  split_file: <CFPP_ROOT_DIR>/resources/ADNI_SPLIT.csv
+  hemisphere: lh
+  device: cuda:0
+  template: /public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/code/CorticalFlow++/corticalflow/resources/smooth_templates/lh_white_smooth_380k.obj
+  surface_name: lh_inner
+  surf_type: inner
+  test_split_name: test
+  dataset_path: /public_bme2/bme-dgshen/caoshui2024/JM-pipeline-original/Step04_sMRI_Signal_Surfaces
+  datasplit_csv: /public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CotexODE/code/CortexODE-ce/data/subject_split_original.csv
+white_model: null
+pial_model:
+  nb_features:
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  - - - 16
+      - 32
+    - - 32
+      - 32
+      - 16
+      - 16
+  integration_method: RK4
+  integration_steps: 10
+  share_flows: true
+  model_checkpoint: /public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/code/CorticalFlow++/results/exp1/best_model_DT2.pth
+  number_of_iterations:
+  - 100
+  - 100
+  - 100
+outputs:
+  output_dir: /public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/code/CorticalFlow++/results/exp01/exp_lh_inner/pred_surf_res
+  out_deform:
+  - 0
+  - 1
+  - 2
+  out_format: freesurfer
+
+[2026-01-21 14:51:33,106][__main__][INFO] - loading from 5T...
+[2026-01-21 14:51:33,397][__main__][INFO] - 42 subjects loaded for test in 0.2909 secs
+[2026-01-21 14:51:33,397][__main__][INFO] - White model is not specified.
+[2026-01-21 14:51:33,579][__main__][INFO] - 0.1813 secs for white model setup:
+CorticalFlow(
+  (deform_blocks): ModuleList(
+    (0): DeformationBlock(
+      (encoder): Unet(
+        (downarm): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(1, 16, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 32, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+        (uparm): ModuleList(
+          (0): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+          (1): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(48, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+        )
+        (extras): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(33, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+      )
+      (flow): Conv3d(16, 3, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+      (deformer): DiffeoMeshDeformer(
+        (integrate): IntegratePointWiseRK4(
+          (interpolator): PointPooling()
+        )
+      )
+    )
+    (1): DeformationBlock(
+      (encoder): Unet(
+        (downarm): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(4, 16, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 32, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+        (uparm): ModuleList(
+          (0): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+          (1): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(48, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+        )
+        (extras): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(36, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+      )
+      (flow): Conv3d(16, 3, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+      (deformer): DiffeoMeshDeformer(
+        (integrate): IntegratePointWiseRK4(
+          (interpolator): PointPooling()
+        )
+      )
+    )
+    (2): DeformationBlock(
+      (encoder): Unet(
+        (downarm): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(7, 16, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 32, kernel_size=(3, 3, 3), stride=(2, 2, 2), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+        (uparm): ModuleList(
+          (0): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+          (1): Sequential(
+            (0): ConvBlock(
+              (main): Conv3d(48, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+              (activation): LeakyReLU(negative_slope=0.2)
+            )
+            (1): Upsample(scale_factor=2.0, mode='nearest')
+          )
+        )
+        (extras): ModuleList(
+          (0): ConvBlock(
+            (main): Conv3d(39, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+          (1): ConvBlock(
+            (main): Conv3d(16, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+            (activation): LeakyReLU(negative_slope=0.2)
+          )
+        )
+      )
+      (flow): Conv3d(16, 3, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+      (deformer): DiffeoMeshDeformer(
+        (integrate): IntegratePointWiseRK4(
+          (interpolator): PointPooling()
+        )
+      )
+    )
+  )
+)
+[2026-01-21 14:51:33,579][__main__][INFO] - Pial model Total number of parameters: 325737
+[2026-01-21 14:51:33,654][__main__][INFO] - Pial Model weights at deformation train 2 iteration 1 and validation metric 0.0001 loaded from /public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/code/CorticalFlow++/results/exp1/best_model_DT2.pth in 0.0747 secs
+[2026-01-21 14:51:33,654][__main__][INFO] - predicting...
+[2026-01-21 14:51:49,759][__main__][INFO] - 6/42 subjects processed.
+[2026-01-21 14:51:49,759][__main__][INFO] - DONE !!!

@@ -40,7 +40,7 @@ cd $WORKDIR || exit
 # CONFIG="/public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/corticalflow/resources/config_samples/CFPP_eval_lh_5T_inner.yaml"
 code="/public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/corticalflow/"
 
-IN_FILE="/public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res/eval_list.csv"
-OUT_DIR="/public_bme2/Share200T/caoshui2024/Project2_Deeplearning/CorticalFlow++/results/exp1/eval_res"
+IN_FILE="/public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/code/CorticalFlow++/results/exp01/exp_lh_inner/eval_list_csv/eval_list.csv"
+OUT_DIR="/public_bme2/bme-dgshen/caoshui2024/DP_Project/CorticalFlow++/code/CorticalFlow++/results/exp01/exp_lh_inner/eval_res"
 
 python $code/eval_hypo.py in_file=$IN_FILE out_dir=$OUT_DIR
